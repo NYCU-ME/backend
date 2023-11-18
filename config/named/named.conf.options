@@ -8,5 +8,50 @@ options {
 	dnssec-validation yes;
 };
 
+logging
+{
+     channel default-log {
+         file "/var/log/named/named_default.log" versions 10 size 200m;
+         severity info;
+         print-time yes;
+     };
+     channel lamer-log {
+         file"/var/log/named/named_lamer.log" versions 3 size 100m;
+         severity info;
+         print-severity yes;
+        print-time yes;
+         print-category yes;
+     };
+    channel query-log {
+         file "/var/log/named/named_query.log" versions 10 size 100m;
+         severity info;
+         print-time yes;
+     };
+    channel security-log {
+         file"/var/log/named/named_security.log" versions 3 size 100m;
+        severity info;
+        print-severity yes;
+        print-time yes;
+        print-category yes;
+    };
+     channel query-errors_log {
+          file "/var/log/named/query_errors.log" versions 5 size 100m;
+          print-time yes;
+          print-category yes;
+          print-severity yes;
+          severity dynamic;
+     };
+    category lame-servers { lamer-log; };
+    category security{ security-log;};
+    category queries { query-log;};
+    category default { default-log;};
+};
+
 include "/etc/bind/ddnskey.conf";
+
+controls {
+    inet 172.21.21.3 port 953
+    allow { 172.21.21.1; 172.21.21.0/24; 127.0.0.1; } keys { "ddnskey"; };
+};
+
 include "/etc/bind/zones.conf";

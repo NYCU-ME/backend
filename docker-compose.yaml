@@ -22,6 +22,7 @@ services:
     volumes:
       - ./data/zones:/var/named
       - ./config/named:/etc/bind
+      - ./log/named:/var/log/named
     ports:
       - "53:53/UDP"
       - "953:953"
