@@ -22,13 +22,24 @@ services:
     volumes:
       - ./data/zones:/var/named
       - ./config/named:/etc/bind
-      - ./log/named:/var/log/named
+      - ./logs/named:/var/log/named
     ports:
       - "53:53/UDP"
       - "953:953"
     networks:
       docker:
         ipv4_address: 172.21.21.3
+
+  flask_app:
+    build: ./images/flask    
+    volumes:
+      - ./app:/opt/app/
+      - ./config/named/ddns.key:/etc/ddnskey.conf
+    ports:
+      - "5000:5000"
+    networks:
+      docker:
+        ipv4_address: 172.21.21.4
 
 networks:
   docker:

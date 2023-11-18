@@ -10,41 +10,17 @@ options {
 
 logging
 {
-     channel default-log {
-         file "/var/log/named/named_default.log" versions 10 size 200m;
-         severity info;
-         print-time yes;
-     };
-     channel lamer-log {
-         file"/var/log/named/named_lamer.log" versions 3 size 100m;
-         severity info;
-         print-severity yes;
-        print-time yes;
-         print-category yes;
-     };
-    channel query-log {
-         file "/var/log/named/named_query.log" versions 10 size 100m;
-         severity info;
-         print-time yes;
-     };
-    channel security-log {
-         file"/var/log/named/named_security.log" versions 3 size 100m;
+     channel logger {
+        stderr;
         severity info;
         print-severity yes;
         print-time yes;
         print-category yes;
     };
-     channel query-errors_log {
-          file "/var/log/named/query_errors.log" versions 5 size 100m;
-          print-time yes;
-          print-category yes;
-          print-severity yes;
-          severity dynamic;
-     };
-    category lame-servers { lamer-log; };
-    category security{ security-log;};
-    category queries { query-log;};
-    category default { default-log;};
+    category lame-servers { logger; };
+    category security{ logger;};
+    category queries { logger;};
+    category default { logger;};
 };
 
 include "/etc/bind/ddnskey.conf";
