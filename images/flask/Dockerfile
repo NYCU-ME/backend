@@ -1,0 +1,32 @@
+FROM python:3.13-rc-alpine
+
+# upgrade pip
+RUN pip install --upgrade pip
+
+# get curl for healthchecks
+RUN apk add curl
+
+# permissions and nonroot user for tightened security
+RUN adduser -D nonroot
+RUN mkdir /home/app/ && chown -R nonroot:nonroot /home/app
+RUN mkdir -p /var/log/flask-app && touch /var/log/flask-app/flask-app.err.log && touch /var/log/flask-app/flask-app.out.log
+RUN chown -R nonroot:nonroot /var/log/flask-app
+WORKDIR /home/app
+COPY ./requirements.txt requirements.txt
+RUN mkdir /opt/app
+USER nonroot
+
+# venv
+ENV VIRTUAL_ENV=/home/app/venv
+
+# python setup
+RUN python -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN export FLASK_APP=app.py
+RUN pip install -r requirements.txt
+
+WORKDIR /opt/app
+# define the port number the container should expose
+EXPOSE 8000
+
+CMD ["gunicorn", "-w", "8", "main:app", "--bind", "0.0.0.0:8000"]

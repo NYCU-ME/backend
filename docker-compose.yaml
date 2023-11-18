@@ -22,7 +22,6 @@ services:
     volumes:
       - ./data/zones:/var/named
       - ./config/named:/etc/bind
-      - ./logs/named:/var/log/named
     ports:
       - "53:53/UDP"
       - "953:953"
@@ -36,7 +35,7 @@ services:
       - ./app:/opt/app/
       - ./config/named/ddns.key:/etc/ddnskey.conf
     ports:
-      - "5000:5000"
+      - "8000:8000"
     networks:
       docker:
         ipv4_address: 172.21.21.4
