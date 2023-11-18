@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+  mysqld:
+    image: mysql:latest
+    volumes:
+      - ./data/db:/var/lib/mysql
+      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_DATABASE: nycu_me_dns
+      MYSQL_USER: nycu_me
+      MYSQL_PASSWORD: abc123
+    ports:
+      - "3306:3306"
+    networks:
+      docker:
+        ipv4_address: 172.21.21.2
+
+  named:
+    image: ubuntu/bind9
+    volumes:
+      - ./data/zones:/data
+      - ./config/named:/etc/bind9
+    ports:
+      - "53:53"
+      - "953:953"
+    networks:
+      docker:
+        ipv4_address: 172.21.21.3
+
+networks:
+  docker:
+    ipam:
+      config:
+        - subnet: 172.21.21.0/24
+
+
