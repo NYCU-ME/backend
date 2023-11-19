@@ -1,0 +1,3 @@
+[submodule "images/flask/app"]
+	path = images/flask/app
+	url = https://github.com/NYCU-ME/backend-flask-server
