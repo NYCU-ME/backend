@@ -29,8 +29,9 @@ services:
       docker:
         ipv4_address: 172.21.21.3
 
-  flask_app:
-    build: ./images/flask    
+  flask_app_test:
+    build: ./images/flask
+    command: ["pytest", "-vv"]
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
     ports:
