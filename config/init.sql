@@ -9,7 +9,7 @@ FLUSH PRIVILEGES;
 --
 
 CREATE TABLE `users` (
-      `Id` varchar(16) NOT NULL,
+      `id` varchar(16) NOT NULL,
       `name` varchar(256) NOT NULL,
       `username` varchar(256) NOT NULL,
       `password` varchar(100) NOT NULL DEFAULT '',
@@ -17,8 +17,8 @@ CREATE TABLE `users` (
       `email` varchar(256) NOT NULL,
       `limit` int(11) NOT NULL DEFAULT '2',
       `isAdmin` int(11) NOT NULL DEFAULT '0',
-      PRIMARY KEY (`Id`),
-      UNIQUE KEY `Id_UNIQUE` (`Id`)
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -34,7 +34,7 @@ CREATE TABLE `domains` (
       `status` tinyint(1) DEFAULT '1',
       PRIMARY KEY (`id`),
       KEY `userId_idx` (`userId`),
-      CONSTRAINT `domains_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`Id`)
+      CONSTRAINT `domains_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `domains` (
 --
 
 CREATE TABLE `records` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
       `domain` int(11) NOT NULL,
       `type` char(16) NOT NULL,
       `value` varchar(256) DEFAULT NULL,
@@ -50,6 +51,7 @@ CREATE TABLE `records` (
       `expDate` datetime DEFAULT NULL,
       `status` tinyint(1) DEFAULT '1',
       KEY `domain_idx` (`domain`),
+      PRIMARY KEY (`id`),
       CONSTRAINT `records_ibfk_1` FOREIGN KEY (`domain`) REFERENCES `domains` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
