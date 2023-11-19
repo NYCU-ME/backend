@@ -13,20 +13,22 @@ RUN mkdir -p /var/log/flask-app && touch /var/log/flask-app/flask-app.err.log &&
 RUN chown -R nonroot:nonroot /var/log/flask-app
 WORKDIR /home/app
 COPY ./requirements.txt requirements.txt
-RUN mkdir /opt/app
-USER nonroot
-
 # venv
 ENV VIRTUAL_ENV=/home/app/venv
 
 # python setup
 RUN python -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN export FLASK_APP=app.py
+RUN export FLASK_APP=main.py
 RUN pip install -r requirements.txt
+
+COPY ./app /opt/app
+RUN chown -R nonroot:nonroot /opt/app
+USER nonroot
+
 
 WORKDIR /opt/app
 # define the port number the container should expose
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "8", "main:app", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "-w", "8", "main:app", "-b", "0.0.0.0:8000"]

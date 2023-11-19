@@ -32,7 +32,6 @@ services:
   flask_app:
     build: ./images/flask    
     volumes:
-      - ./app:/opt/app/
       - ./config/named/ddns.key:/etc/ddnskey.conf
     ports:
       - "8000:8000"
