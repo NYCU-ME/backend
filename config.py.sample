@@ -1,0 +1,19 @@
+# Oauth Parameters
+NYCU_Oauth_ID   = r""
+NYCU_Oauth_key  = r""
+NYCU_Oauth_rURL = r"https://nycu-dev.me/oauth"
+
+#MySQL Parameters
+MySQL_Host = r"172.21.21.2"
+MySQL_User = r"nycu_me"
+MySQL_Pswd = r"abc123"
+MySQL_DB   = r"nycu_me_dns"
+
+#JWT Secret Key
+JWT_secretKey   = r"abc123"
+
+#DDNS
+DDNS_KeyFile = r"/etc/ddnskey.conf"
+DDNS_Server  = r"172.21.21.3"
+DDNS_Zone    = r"nycu-dev.me"
+
