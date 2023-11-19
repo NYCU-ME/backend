@@ -1,4 +1,4 @@
-E `nycu_me_dns`;
+USE `nycu_me_dns`;
 
 CREATE USER IF NOT EXISTS 'nycu_dns'@'%' IDENTIFIED BY 'abc123';
 GRANT ALL PRIVILEGES ON `nycu_me_dns`.* TO 'nycu_dns'@'%';
