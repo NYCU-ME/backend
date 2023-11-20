@@ -11,14 +11,14 @@ resolver = pydig.Resolver(
     ],
 )
 
-testdata_a = [("test.nycu-dev.me", 'A', "140.113.89.64", 5),
+testdata_A = [("test.nycu-dev.me", 'A', "140.113.89.64", 5),
               ("test.nycu-dev.me", 'A', "140.113.64.89", 5),
               ("test2.nycu-dev.me", 'A', "140.113.69.69", 86400),
 ]
 
-def test_add_a_record():
+def test_add_A_record():
     domains = {}
-    for testcase in testdata_a:
+    for testcase in testdata_A:
         ddns.addRecord(*testcase);
         if testcase[0] not in domains:
             domains[testcase[0]] = set()
@@ -26,6 +26,6 @@ def test_add_a_record():
     time.sleep(5)
     for domain in domains:
         assert set(resolver.query(domain, 'A')) == domains[domain]
-    for testcase in testdata_a:
+    for testcase in testdata_A:
         ddns.delRecord(*testcase[:-1])
 

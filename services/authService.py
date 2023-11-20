@@ -1,6 +1,5 @@
 from sqlalchemy.orm import sessionmaker
 from datetime import timezone, datetime
-from models import db
 import jwt
 
 class UnauthorizedError(Exception):
@@ -14,10 +13,10 @@ class UnauthorizedError(Exception):
         return "Unauthorized: " + self.msg
 
 class AuthService:
-    def __init__(self, logger, jwt_secret, sql_engine):
+    def __init__(self, logger, jwt_secret, users):
         self.logger = logger
         self.jwt_secret = jwt_secret
-        self.sql_engine = sql_engine
+        self.users = users
 
     def issue_token(self, profile):
         now = int(datetime.now(tz=timezone.utc).timestamp())
@@ -27,19 +26,14 @@ class AuthService:
         token['iat'] = token['nbf'] = now
         token['uid'] = token['username']
         
-        Session = sessionmaker(bind=self.sql_engine)
-        session = Session()
-        user = session.query(db.User).filter_by(id=token['uid']).all()
+        user = self.users.query(token['uid'])
 
-        if len(user):
-            user = user[0]
+        if user:
             if user.email != token['email']:
-                user.email = token['email']
-                session.commit()
+                self.users.update(token['uid'], token['email'])
         else:
-            user = db.User(id=token['uid'], name='', username='', password='', status='active', email=token['email'])
-            session.add(user)
-            session.commit()
+            self.users.add(uid=token['uid'], name='', username='', password='', status='active', email=token['email'])
+
         token = jwt.encode(token, self.jwt_secret, algorithm="HS256")
         return token
     

@@ -4,6 +4,7 @@ import logging
 from sqlalchemy import create_engine
 
 from config import *
+from models import users
 from services import *
 
 app = Flask(__name__)
@@ -18,11 +19,12 @@ sql_engine = create_engine(
     )
 )
 
+users = users.Users(sql_engine)
 nycu_oauth = Oauth(redirect_uri = NYCU_Oauth_rURL,
                    client_id = NYCU_Oauth_ID,
                    client_secret = NYCU_Oauth_key)
 
-authService = AuthService(logging, JWT_secretKey, sql_engine)
+authService = AuthService(logging, JWT_secretKey, users)
 
 @app.route('/')
 def hello_world():
