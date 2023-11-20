@@ -3,6 +3,16 @@ from datetime import timezone, datetime
 from models import db
 import jwt
 
+class UnauthorizedError(Exception):
+    def __init__(self, msg):
+        self.msg = str(msg)
+
+    def __str__(self):
+        return self.msg
+
+    def __repr__(self):
+        return "Unauthorized: " + self.msg
+
 class AuthService:
     def __init__(self, logger, jwt_secret, sql_engine):
         self.logger = logger
@@ -32,3 +42,24 @@ class AuthService:
             session.commit()
         token = jwt.encode(token, self.jwt_secret, algorithm="HS256")
         return token
+    
+    def authenticate_token(self, payload):
+        try:
+            if not payload:
+                raise UnauthorizedError("not logged")
+            payload = payload.split(' ')
+            if len(payload) != 2:
+                raise UnauthorizedError("invalid payload")
+            tokenType, token = payload
+            if tokenType != 'Bearer': 
+                raise UnauthorizedError("invalid payload")
+            try:
+                payload = jwt.decode(token, self.jwt_secret, algorithms=["HS256"])
+            except Exception as e:
+                self.logger.debug(e.__str__())
+                return None
+            return payload
+        except UnauthorizedError as e:
+            self.logger.debug(e.__str__())
+            return None
+
