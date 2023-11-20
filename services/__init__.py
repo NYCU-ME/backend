@@ -1,2 +1,3 @@
-from .authService import AuthService
+from .authService import *
+from .dnsService import *
 from .nctu_oauth import *

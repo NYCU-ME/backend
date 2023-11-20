@@ -1,33 +1,33 @@
-from flask import Flask, g, Response, request, abort
+from flask import Flask
 import flask_cors
 import logging
 from sqlalchemy import create_engine
 
-from config import *
-from models import users
-from services import *
+import config
+from models import Users
+from services import AuthService, DNSService, Oauth
 
 app = Flask(__name__)
 flask_cors.CORS(app)
 
 sql_engine = create_engine(
     'mysql+pymysql://{user}:{pswd}@{host}/{db}'.format(
-        user=MySQL_User,
-        pswd=MySQL_Pswd,
-        host=MySQL_Host,
-        db=MySQL_DB
+        user=config.MYSQL_USER,
+        pswd=config.MYSQL_PSWD,
+        host=config.MYSQL_HOST,
+        db=config.MYSQL_DB
     )
 )
 
-users = users.Users(sql_engine)
-nycu_oauth = Oauth(redirect_uri = NYCU_Oauth_rURL,
-                   client_id = NYCU_Oauth_ID,
-                   client_secret = NYCU_Oauth_key)
+users = Users(sql_engine)
+nycu_oauth = Oauth(redirect_uri = config.NYCU_OAUTH_RURL,
+                   client_id = config.NYCU_OAUTH_ID,
+                   client_secret = config.NYCU_OAUTH_KEY)
 
-authService = AuthService(logging, JWT_secretKey, users)
+authService = AuthService(logging, config.JWT_SECRET, users)
 
 @app.route('/')
 def hello_world():
     return 'Hello, World.'
 
-from controllers import *
+from controllers import auth

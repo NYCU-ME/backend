@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from . import db
-
+import logging
 class Users:
     def __init__(self, sql_engine):
         Session = sessionmaker(bind=sql_engine)

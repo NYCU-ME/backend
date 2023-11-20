@@ -30,7 +30,7 @@ class AuthService:
 
         if user:
             if user.email != token['email']:
-                self.users.update(token['uid'], token['email'])
+                self.users.update_email(token['uid'], token['email'])
         else:
             self.users.add(uid=token['uid'], name='', username='', password='', status='active', email=token['email'])
 

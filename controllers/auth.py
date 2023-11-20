@@ -1,5 +1,5 @@
-from flask import Response, request
-from main import app, g, nycu_oauth, authService
+from flask import g
+from main import app, nycu_oauth, authService
 
 
 @app.before_request
