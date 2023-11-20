@@ -25,18 +25,23 @@ class AuthService:
         token['exp'] = (now) + 3600
         token['iat'] = token['nbf'] = now
         token['uid'] = token['username']
-        
+
         user = self.users.query(token['uid'])
 
         if user:
             if user.email != token['email']:
                 self.users.update_email(token['uid'], token['email'])
         else:
-            self.users.add(uid=token['uid'], name='', username='', password='', status='active', email=token['email'])
+            self.users.add(uid=token['uid'], 
+                           name='', 
+                           username='', 
+                           password='', 
+                           status='active', 
+                           email=token['email'])
 
         token = jwt.encode(token, self.jwt_secret, algorithm="HS256")
         return token
-    
+
     def authenticate_token(self, payload):
         try:
             if not payload:

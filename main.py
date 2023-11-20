@@ -1,6 +1,6 @@
+import logging
 from flask import Flask
 import flask_cors
-import logging
 from sqlalchemy import create_engine
 
 import config
@@ -11,7 +11,7 @@ app = Flask(__name__)
 flask_cors.CORS(app)
 
 sql_engine = create_engine(
-    'mysql+pymysql://{user}:{pswd}@{host}/{db}'.format(
+    f'mysql+pymysql://{user}:{pswd}@{host}/{db}'.format(
         user=config.MYSQL_USER,
         pswd=config.MYSQL_PSWD,
         host=config.MYSQL_HOST,
@@ -25,9 +25,5 @@ nycu_oauth = Oauth(redirect_uri = config.NYCU_OAUTH_RURL,
                    client_secret = config.NYCU_OAUTH_KEY)
 
 authService = AuthService(logging, config.JWT_SECRET, users)
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World.'
 
 from controllers import auth

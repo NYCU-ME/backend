@@ -3,10 +3,9 @@ from enum import Enum
 
 
 class DNSErrors(Enum):
-    NXDomain             = "Non-ExistentDomain"
-    NotAllowedRecordType = "NotAllowedRecordType"
-    DuplicatedRecord     = "DuplicatedRecord"
-    NotAllowedOperation  = "NotAllowedOperation" 
+    NXDOMAIN             = "Non-ExistentDomain"
+    DUPLICATED           = "DuplicatedRecord"
+    UNALLOWED            = "NotAllowedOperation" 
 
 class DNSError(Exception):
     def __init__(self, typ, msg = ""):
@@ -49,19 +48,19 @@ class DNSService():
     def register_domain(self, uid, domain_name):
         domain = self.domains.get_domain(domain_name)
         if domain:
-            raise DNSError(DNSErrors.NotAllowedOperation, "This domain have been registered.")
+            raise DNSError(DNSErrors.UNALLOWED, "This domain have been registered.")
         self.domains.register(domain_name, uid)
 
     def renew_domain(self, domain_name):
         domain = self.domains.get_domain(domain_name)
         if not domain:
-            raise DNSError(DNSErrors.NotAllowedOperation, "This domain is not registered.")
+            raise DNSError(DNSErrors.NXDOMAIN, "This domain is not registered.")
         self.domains.renew(domain_name)
 
     def release_domain(self, domain_name):
         domain = self.domains.get_domain(domain_name)
         if not domain:
-            raise DNSError(DNSErrors.NotAllowedOperation, "This domain is not registered.")
+            raise DNSError(DNSErrors.NXDOMAIN, "This domain is not registered.")
         records = self.records.get_records(domain.id)
         for record in records:
             self.del_record(record.id)
@@ -70,12 +69,12 @@ class DNSService():
     def add_record(self, domain_name, type_, value, ttl):
         domain = self.domains.get_domain(domain_name)
         if not domain:
-            raise DNSError(DNSErrors.NotAllowedOperation, "This domain is not registered.")
+            raise DNSError(DNSErrors.NXDOMAIN, "This domain is not registered.")
 
         records = self.records.get_records(domain.id)
         for record in records:
             if type_ == record.type and value == record.value:
-                raise DNSError(DNSErrors.DuplicatedRecord, "You have created same record.")
+                raise DNSError(DNSErrors.DUPLICATED, "You have created same record.")
 
         self.records.add_record(domain.id, type_, value, ttl)
         self.ddns.add_record(domain_name, type_, value, ttl)
@@ -83,7 +82,7 @@ class DNSService():
     def del_record(self, record_id):
         record = self.records.get_record(record_id)
         if not record:
-            raise DNSError(DNSErrors.NotAllowedOperation, "This record does not exist.")
+            raise DNSError(DNSErrors.UNALLOWED, "This record does not exist.")
 
         domain = self.domains.get_domain_by_id(record.domain_id)
         self.records.del_record(record_id)

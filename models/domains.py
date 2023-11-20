@@ -29,7 +29,11 @@ class Domains:
         now = datetime.now()
         regDate = now
         expDate = (now + timedelta(days=30))
-        domain = db.Domain(userId = user, domain = domain, regDate = regDate, expDate = expDate, status = 1)
+        domain = db.Domain(userId = user,
+                           domain = domain,
+                           regDate = regDate,
+                           expDate = expDate,
+                           status = 1)
         self.session.add(domain)
         self.session.commit()
 
