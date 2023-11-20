@@ -11,8 +11,6 @@ services:
       MYSQL_DATABASE: nycu_me_dns
       MYSQL_USER: nycu_me
       MYSQL_PASSWORD: abc123
-    ports:
-      - "3306:3306"
     networks:
       docker:
         ipv4_address: 172.21.21.2
@@ -22,20 +20,15 @@ services:
     volumes:
       - ./data/zones:/var/named
       - ./config/named:/etc/bind
-    ports:
-      - "53:53/UDP"
-      - "953:953"
     networks:
       docker:
         ipv4_address: 172.21.21.3
 
   flask_app_test:
     build: ./images/flask
-    command: ["pytest", "-vv"]
+    command: /bin/sh -c "pylint /opt/app --recursive=true; pytest -vv -n 8 /opt/app"
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
-    ports:
-      - "8000:8000"
     networks:
       docker:
         ipv4_address: 172.21.21.4

@@ -9,3 +9,5 @@ requests==2.31.0
 greenlet==3.0.1
 SQLAlchemy==2.0.23
 pymysql==1.1.0
+pylint==3.0.2
+pytest-xdist==3.4.0

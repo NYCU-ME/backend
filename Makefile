@@ -21,3 +21,6 @@ test:
 	@kill -9 `cat .pidfile`
 	@rm .pidfile
 	@rm .event
+
+rm-db:
+	rm -rf data/db/*
