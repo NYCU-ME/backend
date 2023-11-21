@@ -11,7 +11,7 @@ app = Flask(__name__)
 flask_cors.CORS(app)
 
 sql_engine = create_engine(
-    f'mysql+pymysql://{user}:{pswd}@{host}/{db}'.format(
+    'mysql+pymysql://{user}:{pswd}@{host}/{db}'.format(
         user=config.MYSQL_USER,
         pswd=config.MYSQL_PSWD,
         host=config.MYSQL_HOST,
