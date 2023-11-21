@@ -30,17 +30,38 @@ records = Records(sql_engine)
 authService = AuthService(logging, config.JWT_SECRET, users)
 dnsService = DNSService(logging, users, domains, records, ddns)
 
-testdata = [("test.nycu-dev.me", 'A', "140.113.89.64", 5),
-            ("test.nycu-dev.me", 'A', "140.113.64.89", 5)]
+testdata = [("test-reg.nycu-dev.me", 'A', "140.113.89.64", 5),
+            ("test-reg.nycu-dev.me", 'A', "140.113.64.89", 5)]
 answer = {"140.113.89.64", "140.113.64.89"}
 
 def test_domain_register():
-    dnsService.register_domain("109550028", "test.nycu-dev.me")
+    dnsService.register_domain("109550028", "test-reg.nycu-dev.me")
     for testcase in testdata:
         dnsService.add_record(*testcase)
     time.sleep(10)
-    assert set(resolver.query("test.nycu-dev.me", 'A')) == answer
-    dnsService.release_domain("test.nycu-dev.me")
+    assert set(resolver.query("test-reg.nycu-dev.me", 'A')) == answer
+    dnsService.release_domain("test-reg.nycu-dev.me")
     dnsService.register_domain("109550028", "test")
     time.sleep(10)
-    assert set(resolver.query("test.nycu-dev.me", 'A')) == set()
+    assert set(resolver.query("test-reg.nycu-dev.me", 'A')) == set()
+
+def test_dulplicated_domain_register():
+    dnsService.register_domain("109550028", "test-reg-dup.nycu-dev.me")
+    try:
+        dnsService.register_domain("109550028", "test-reg-dup.nycu-dev.me")
+        assert 0
+    except Exception:
+        assert 1
+    dnsService.release_domain("test-reg-dup.nycu-dev.me")
+
+def test_nxdomain_operation():
+    try:
+        for testcase in testdata:
+            dnsService.add_record(*testcase)
+        assert 0
+    except Exception:
+        assert 1
+    try:
+        dnsService.release_domain("test-reg-nx.nycu-dev.me")
+    except Exception:
+        assert 1
