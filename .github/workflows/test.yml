@@ -1,0 +1,28 @@
+name: Test
+
+on:
+  push:
+    branches:
+    - main
+    - features/**
+    - dependabot/**
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  docker:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        submodules: 'recursive'
+
+    - name: Copy config file
+      run: cp ./images/flask/app/config.py.sample ./images/flask/app/config.py
+
+    - name: Running test
+      run: make init && make test

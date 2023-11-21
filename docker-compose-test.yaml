@@ -1,20 +1,6 @@
 version: '3.3'
 
 services:
-  mysqld:
-    image: mysql:latest
-    volumes:
-      - ./data/db:/var/lib/mysql
-      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
-    environment:
-      MYSQL_ROOT_PASSWORD: abc123
-      MYSQL_DATABASE: nycu_me_dns
-      MYSQL_USER: nycu_me
-      MYSQL_PASSWORD: abc123
-    networks:
-      docker:
-        ipv4_address: 172.21.21.2
-
   named:
     image: ubuntu/bind9
     volumes:
@@ -26,7 +12,7 @@ services:
 
   flask_app_test:
     build: ./images/flask
-    command: /bin/sh -c "pylint /opt/app --recursive=true; pytest -vv -n 8 /opt/app"
+    command: /bin/sh -c "pylint /opt/app --recursive=true ; pytest -vv -n 8 /opt/app"
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
     networks:
@@ -34,7 +20,6 @@ services:
         ipv4_address: 172.21.21.4
     depends_on:
       - named
-      - mysqld
 
 networks:
   docker:
