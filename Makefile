@@ -10,17 +10,24 @@ build:
 run:
 	docker compose up
 
-test:
+run-test:
 	@docker compose -f docker-compose-test.yaml up -d
 	@docker events --filter 'event=die' --filter "container=nycu-me-flask_app_test-1" > .event & echo $$! > .pidfile
 	@while [ -z "$$(cat .event)" ]; do \
 			sleep 1; \
 	done
 	@docker compose -f docker-compose-test.yaml logs flask_app_test
+	docker compose -f docker-compose-test.yaml ps -a | grep flask_app_test | egrep -o "Exited \(.*\)" | egrep -o "\(.*\)" | tr -d '()' > .test_result 
 	@docker compose -f docker-compose-test.yaml down
+	test_result=$$(cat .test_result)
 	@kill -9 `cat .pidfile`
 	@rm .pidfile
 	@rm .event
 
+test: run-test
+	@$(eval test_result := $(shell cat .test_result))
+	@rm .test_result
+	@exit $(test_result)
+	
 rm-db:
 	rm -rf data/db/*
