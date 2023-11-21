@@ -6,6 +6,9 @@ pull:
 
 init:
 	@chmod 777 ./data/zones
+	@rm -f ./config/named/keys/*
+	@./tools/genkeys.sh
+	@tsig-keygen -a hmac-sha512  ddnskey > ./config/named/ddnskey.conf
 
 build:
 	docker compose build
@@ -35,3 +38,6 @@ test: run-test
 	
 rm-db:
 	rm -rf data/db/*
+	rm -f data/zones/*.jbk
+	rm -f data/zones/*.jnl
+	rm -f data/zones/*.signed

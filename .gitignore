@@ -2,3 +2,6 @@ data/db
 *.jbk
 *.jnl
 *.signed
+*.key
+*.private
+ddnskey.conf
