@@ -1,10 +1,20 @@
 # new-backend
 
-## 請更改下列文件
+## 請執行以下指令
 
-1. docker-compose.yaml
-2. config/init.sql
+```
+# make pull
+# make init
+```
 
-並且透過 `sudo tsig-keygen -a hmac-sha512  ddnskey` 生成一個 ddnskey.conf 取代掉 `config/named/ddnskey.conf`，請注意爲了執行此指令你必須安裝 bind9。
+## 運行
 
+```
+# sudo make run
+```
 
+## 測試
+
+```
+# sudo make test
+```

@@ -11,8 +11,6 @@ services:
       MYSQL_DATABASE: nycu_me_dns
       MYSQL_USER: nycu_me
       MYSQL_PASSWORD: abc123
-    ports:
-      - "3306:3306"
     networks:
       docker:
         ipv4_address: 172.21.21.2
