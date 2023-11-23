@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import logging
 
-from services.authService import AuthService
+from services.auth_service import AuthService
 from models import users, db
 import config
 

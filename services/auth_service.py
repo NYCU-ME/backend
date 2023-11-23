@@ -1,6 +1,26 @@
 from sqlalchemy.orm import sessionmaker
 from datetime import timezone, datetime
+from enum import Enum
 import jwt
+
+
+class UnauthorizedError(Exception):
+
+    def __init__(self, msg):
+        self.msg = str(msg)
+
+    def __str__(self):
+        return self.msg
+
+    def __repr__(self):
+        return "Unauthorized: " + self.msg
+
+class OperationErrors(Enum):
+    NotAllowedDomain     = "NotAllowedDomain"
+    NumberLimitExceed    = "NumberLimitExceed"
+    AssignedDomainName   = "AssignedDomainName"
+    PermissionDenied     = "PermissionDenied"
+    ReservedDomain       = "ReservedDomain"
 
 class UnauthorizedError(Exception):
     def __init__(self, msg):

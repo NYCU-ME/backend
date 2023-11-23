@@ -1,6 +1,9 @@
 import time
+import re
 from enum import Enum
 
+
+DOMAIN_REGEX = re.compile(r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)$")
 
 class DNSErrors(Enum):
     NXDOMAIN             = "Non-ExistentDomain"
@@ -19,12 +22,36 @@ class DNSError(Exception):
         return "%s: %s" % (self.typ, self.msg)
 
 class DNSService():
-    def __init__(self, logger, users, domains, records, ddns):
+    def __init__(self, logger, users, domains, records, ddns, host_domains):
         self.logger  = logger
         self.users = users
         self.domains = domains
         self.records = records
         self.ddns = ddns
+        self.host_domains = host_domains
+
+    def check_domain(self, domain_name):
+        domain_struct = list(reversed(domain_name.split('.')))
+
+        for p in domain_struct:
+            if not DOMAIN_REGEX.fullmatch(p):
+                return False
+        
+        def is_match(rule, struct):
+            # Check if the domain is matching to a specific rule
+            rule = list(reversed(rule.split('.')))
+            if len(rule) > len(struct):
+                return False
+            
+            for i in range(len(rule)):
+                if rule[i] == '*':
+                    return 1
+                elif rule[i] != struct[i]:
+                    return False
+
+        for domain in self.host_domains:
+            if is_match(domain, domain_struct):
+                return True
 
     def get_domain(self, domain_name):
         domain = self.domains.get_domain(domain_name)
@@ -46,6 +73,8 @@ class DNSService():
         return domain_info
 
     def register_domain(self, uid, domain_name):
+        if not self.check_domain(domain_name):
+            raise DNSError(DNSErrors.UNALLOWED, "This domain is not hosted by us.")
         domain = self.domains.get_domain(domain_name)
         if domain:
             raise DNSError(DNSErrors.UNALLOWED, "This domain have been registered.")

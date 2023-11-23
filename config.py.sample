@@ -16,3 +16,6 @@ JWT_SECRET   = r"abc123"
 DDNS_KEY     = r"/etc/ddnskey.conf"
 DDNS_SERVER  = r"172.21.21.3"
 DDNS_ZONE    = r"nycu-dev.me"
+
+#General
+HOST_DOMAINS = [r"*.nycu-dev.me"]

@@ -1,3 +1,3 @@
-from .authService import *
-from .dnsService import *
+from .auth_service import *
+from .dns_service import *
 from .nctu_oauth import *

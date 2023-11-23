@@ -28,7 +28,7 @@ domains = Domains(sql_engine)
 records = Records(sql_engine)
 
 authService = AuthService(logging, config.JWT_SECRET, users)
-dnsService = DNSService(logging, users, domains, records, ddns)
+dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMAINS)
 
 testdata = [("test-reg.nycu-dev.me", 'A', "140.113.89.64", 5),
             ("test-reg.nycu-dev.me", 'A', "140.113.64.89", 5)]
@@ -41,7 +41,7 @@ def test_domain_register():
     time.sleep(10)
     assert set(resolver.query("test-reg.nycu-dev.me", 'A')) == answer
     dnsService.release_domain("test-reg.nycu-dev.me")
-    dnsService.register_domain("109550028", "test")
+    dnsService.register_domain("109550028", "test-reg.nycu-dev.me")
     time.sleep(10)
     assert set(resolver.query("test-reg.nycu-dev.me", 'A')) == set()
 
@@ -63,5 +63,12 @@ def test_nxdomain_operation():
         assert 1
     try:
         dnsService.release_domain("test-reg-nx.nycu-dev.me")
+    except Exception:
+        assert 1
+
+def test_unhost_operation():
+    try:
+        dnsService.register_domain("109550028", "www.google.com")
+        assert 0
     except Exception:
         assert 1
