@@ -22,6 +22,12 @@ class OperationErrors(Enum):
     PermissionDenied     = "PermissionDenied"
     ReservedDomain       = "ReservedDomain"
 
+class Operation(Enum):
+    APPLY   = 1
+    RELEASE = 2
+    MODIFY  = 3
+    RENEW   = 4
+
 class UnauthorizedError(Exception):
     def __init__(self, msg):
         self.msg = str(msg)
@@ -33,10 +39,11 @@ class UnauthorizedError(Exception):
         return "Unauthorized: " + self.msg
 
 class AuthService:
-    def __init__(self, logger, jwt_secret, users):
+    def __init__(self, logger, jwt_secret, users, domains):
         self.logger = logger
         self.jwt_secret = jwt_secret
         self.users = users
+        self.domains = domains
 
     def issue_token(self, profile):
         now = int(datetime.now(tz=timezone.utc).timestamp())
@@ -81,4 +88,21 @@ class AuthService:
         except UnauthorizedError as e:
             self.logger.debug(e.__str__())
             return None
-
+    
+    def authorize_action(self, uid, action, domain_name):
+        if action == Operation.APPLY:
+            domains = self.domains.list_by_user(uid)
+            if len(domains) >= self.users.query(uid).limit:
+                raise OperationError(OperationErrors.NumberLimitExceed, "You cannot apply for more domains.")
+        if action == Operation.RELEASE:
+            domain = self.domains.get_domain(domain_name)
+            if domain.userId != uid:
+                raise OperationError(OperationErrors.PermissionDenied, "You cannot modify domain %s which you don't have." % (domainName, ))
+        if action == Operation.MODIFY:
+            domain = self.domains.get_domain(domain_name)
+            if domain.userId != uid:
+                raise OperationError(OperationErrors.PermissionDenied, "You cannot modify domain %s which you don't have." % (domainName, ))
+        if action == Operation.RENEW:
+            domain = self.domains.get_domain(domain_name)
+            if domain.userId != uid:
+                raise OperationError(OperationErrors.PermissionDenied, "You cannot modify domain %s which you don't have." % (domainName, ))

@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 import logging
 
 from services.auth_service import AuthService
-from models import users, db
+from models import Users, Domains, db
 import config
 
 sql_engine = create_engine('sqlite:///:memory:') 
@@ -11,8 +11,9 @@ db.Base.metadata.create_all(sql_engine)
 Session = sessionmaker(bind=sql_engine)
 session = Session()
 
-users = users.Users(sql_engine)
-authService = AuthService(logging, config.JWT_SECRET, users)
+users = Users(sql_engine)
+domains = Domains(sql_engine)
+authService = AuthService(logging, config.JWT_SECRET, users, domains)
 
 testdata = [{'email':"lin.cs09@nycu.edu.tw",'username':"109550028"},
             {'email':"lin.cs09@nctu.edu.tw",'username':"109550028"}]

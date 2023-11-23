@@ -5,7 +5,7 @@ import pydig
 import time
 
 from models import Domains, Records, Users, db, DDNS
-from services import AuthService, DNSService
+from services import DNSService
 import config
 
 
@@ -27,7 +27,6 @@ users = Users(sql_engine)
 domains = Domains(sql_engine)
 records = Records(sql_engine)
 
-authService = AuthService(logging, config.JWT_SECRET, users)
 dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMAINS)
 
 testdata = [("test-reg.nycu-dev.me", 'A', "140.113.89.64", 5),
@@ -66,9 +65,10 @@ def test_nxdomain_operation():
     except Exception:
         assert 1
 
-def test_unhost_operation():
+def test_unhost_register():
     try:
         dnsService.register_domain("109550028", "www.google.com")
         assert 0
     except Exception:
         assert 1
+

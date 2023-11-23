@@ -35,23 +35,23 @@ class DNSService():
 
         for p in domain_struct:
             if not DOMAIN_REGEX.fullmatch(p):
-                return False
-        
+                return 0
+
         def is_match(rule, struct):
             # Check if the domain is matching to a specific rule
             rule = list(reversed(rule.split('.')))
             if len(rule) > len(struct):
-                return False
+                return 0
             
             for i in range(len(rule)):
                 if rule[i] == '*':
-                    return 1
+                    return i + 1
                 elif rule[i] != struct[i]:
-                    return False
+                    return 0
 
         for domain in self.host_domains:
-            if is_match(domain, domain_struct):
-                return True
+            if (x:=is_match(domain, domain_struct)):
+                return x
 
     def get_domain(self, domain_name):
         domain = self.domains.get_domain(domain_name)
