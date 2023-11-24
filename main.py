@@ -44,4 +44,4 @@ dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMA
 def index():
     return "Hello World!"
 
-from controllers import auth, domains
+from controllers import auth, domains, ddns

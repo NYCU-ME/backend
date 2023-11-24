@@ -20,7 +20,7 @@ def get_token(code):
 def get_token_for_test():
 
     if env_test:
-        return {'token': authService.issue_token(config.TEST_PROFILE)}
+        return {'token': authService.issue_token(request.json)}
     else:
         return {'message': "It is not currently running on testing mode."}, 401
 

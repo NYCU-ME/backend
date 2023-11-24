@@ -103,7 +103,7 @@ class DNSService():
             raise DNSError(DNSErrors.NXDOMAIN, "This domain is not registered.")
         records = self.records.get_records(domain.id)
         for record in records:
-            self.del_record(record.id)
+            self.del_record_by_id(record.id)
         self.domains.release(domain_name)
 
     def add_record(self, domain_name, type_, value, ttl):
@@ -118,12 +118,21 @@ class DNSService():
 
         self.records.add_record(domain.id, type_, value, ttl)
         self.ddns.add_record(domain_name, type_, value, ttl)
+    
+    def del_record(self, domain_name, type_, value):
+        domain_id = self.domains.get_domain(domain_name).id
+        record = self.records.get_record_by_type_value(domain_id,
+                                                       type_,
+                                                       value)
+        if not record:
+            raise DNSError(DNSErrors.UNALLOWED, "This record does not exist.")
+        self.del_record_by_id(record.id)
 
-    def del_record(self, record_id):
+    def del_record_by_id(self, record_id):
         record = self.records.get_record(record_id)
         if not record:
             raise DNSError(DNSErrors.UNALLOWED, "This record does not exist.")
 
         domain = self.domains.get_domain_by_id(record.domain_id)
-        self.records.del_record(record_id)
+        self.records.del_record_by_id(record_id)
         self.ddns.del_record(domain.domain, record.type, record.value)

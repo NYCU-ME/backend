@@ -11,9 +11,25 @@ def register_domain(domain):
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
 
-    #try:
-    authService.authorize_action(g.user['uid'], Operation.APPLY, domain_name)
-    dnsService.register_domain(g.user['uid'], domain_name)
-    return {"msg": "ok"}
-    #except Exception as e:
-    #    return {"error": e.msg}, 403
+    try:
+        authService.authorize_action(g.user['uid'], Operation.APPLY, domain_name)
+        dnsService.register_domain(g.user['uid'], domain_name)
+        return {"msg": "ok"}
+    except Exception as e:
+        return {"error": e.msg}, 403
+
+@app.route("/domains/<path:domain>", methods=['DELETE'])
+def release_domain(domain):
+
+    if not g.user:
+        return {"message": "Unauth."}, 401
+
+    domain_struct = domain.lower().strip('/').split('/')
+    domain_name   = '.'.join(reversed(domain_struct))
+
+    try:
+        authService.authorize_action(g.user['uid'], Operation.RELEASE, domain_name)
+        dnsService.release_domain(domain_name)
+        return {"msg": "ok"}
+    except Exception as e:
+        return {"error": e.msg}, 403

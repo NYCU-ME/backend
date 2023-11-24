@@ -4,24 +4,6 @@ from enum import Enum
 import jwt
 
 
-class UnauthorizedError(Exception):
-
-    def __init__(self, msg):
-        self.msg = str(msg)
-
-    def __str__(self):
-        return self.msg
-
-    def __repr__(self):
-        return "Unauthorized: " + self.msg
-
-class OperationErrors(Enum):
-    NotAllowedDomain     = "NotAllowedDomain"
-    NumberLimitExceed    = "NumberLimitExceed"
-    AssignedDomainName   = "AssignedDomainName"
-    PermissionDenied     = "PermissionDenied"
-    ReservedDomain       = "ReservedDomain"
-
 class Operation(Enum):
     APPLY   = 1
     RELEASE = 2
@@ -93,16 +75,16 @@ class AuthService:
         if action == Operation.APPLY:
             domains = self.domains.list_by_user(uid)
             if len(domains) >= self.users.query(uid).limit:
-                raise OperationError(OperationErrors.NumberLimitExceed, "You cannot apply for more domains.")
+                raise UnauthorizedError("You cannot apply for more domains.")
         if action == Operation.RELEASE:
             domain = self.domains.get_domain(domain_name)
             if domain.userId != uid:
-                raise OperationError(OperationErrors.PermissionDenied, "You cannot modify domain %s which you don't have." % (domainName, ))
+                raise UnauthorizedError("You cannot modify domain %s which you don't have." % (domain_name, ))
         if action == Operation.MODIFY:
             domain = self.domains.get_domain(domain_name)
             if domain.userId != uid:
-                raise OperationError(OperationErrors.PermissionDenied, "You cannot modify domain %s which you don't have." % (domainName, ))
+                raise UnauthorizedError("You cannot modify domain %s which you don't have." % (domain_name, ))
         if action == Operation.RENEW:
             domain = self.domains.get_domain(domain_name)
             if domain.userId != uid:
-                raise OperationError(OperationErrors.PermissionDenied, "You cannot modify domain %s which you don't have." % (domainName, ))
+                raise UnauthorizedError("You cannot modify domain %s which you don't have." % (domain_name, ))

@@ -44,7 +44,7 @@ def test_domain_register():
     time.sleep(10)
     assert set(resolver.query("test-reg.nycu-dev.me", 'A')) == set()
 
-def test_dulplicated_domain_register():
+def test_duplicated_domain_register():
     dnsService.register_domain("109550028", "test-reg-dup.nycu-dev.me")
     try:
         dnsService.register_domain("109550028", "test-reg-dup.nycu-dev.me")
@@ -72,3 +72,12 @@ def test_unhost_register():
     except Exception:
         assert 1
 
+def test_duplicated_record():
+    dnsService.register_domain("109550028", "test-add-dup-rec.nycu-dev.me")
+    dnsService.add_record("test-add-dup-rec.nycu-dev.me", 'A', "140.113.64.89", 5)
+    try:
+        dnsService.add_record("test-add-dup-rec.nycu-dev.me", 'A', "140.113.64.89", 5)
+        assert 0
+    except Exception:
+        assert 1
+    dnsService.release_domain("test-add-dup-rec.nycu-dev.me")
