@@ -10,15 +10,29 @@ services:
       docker:
         ipv4_address: 172.21.21.3
 
-  flask_app_test:
+  flask_app:
     build: ./images/flask
-    command: /bin/sh -c "pylint /opt/app --recursive=true ; pytest -vv -n 8 /opt/app"
+    command: ["gunicorn", "-w", "1", "main:app", "-b", "0.0.0.0:8000"]
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
     networks:
       docker:
         ipv4_address: 172.21.21.4
+    environment:
+      - TEST=1
     depends_on:
+      - named
+
+  flask_app_test:
+    build: ./images/flask
+    command: /bin/sh -c "pylint /opt/app --recursive ; pytest -vv -n 8 /opt/app"
+    volumes:
+      - ./config/named/ddnskey.conf:/etc/ddnskey.conf
+    networks:
+      docker:
+        ipv4_address: 172.21.21.5
+    depends_on:
+      - flask_app
       - named
 
 networks:
