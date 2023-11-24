@@ -1,12 +1,15 @@
 from sqlalchemy.orm import sessionmaker
 from . import db
 import logging
+
+
 class Users:
     def __init__(self, sql_engine):
         Session = sessionmaker(bind=sql_engine)
         self.session = Session()
     
     def query(self, uid):
+        self.session.expire_all()
         user = self.session.query(db.User).filter_by(id=uid).all()
         if len(user):
             return user[0]

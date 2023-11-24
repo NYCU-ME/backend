@@ -10,9 +10,11 @@ class Records:
         self.session = Session()
 
     def get_record(self, record_id):
+        self.session.expire_all()
         return self.session.query(db.Record).filter_by(id=record_id, status=1).first()
  
     def get_records(self, domain_id):
+        self.session.expire_all()
         return self.session.query(db.Record).filter_by(domain_id=domain_id, status=1).all()
 
     def add_record(self, domain_id, record_type, value, ttl):

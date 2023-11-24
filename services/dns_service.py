@@ -72,6 +72,17 @@ class DNSService():
                                            record.ttl))
         return domain_info
 
+    def list_domains_by_user(self, uid):
+        domains = []
+        for domain in self.domains.list_by_user(uid):
+            domain_info = {}
+            domain_info['id'] = domain.id
+            domain_info['regDate'] = domain.regDate
+            domain_info['expDate'] = domain.expDate
+            domain_info['domain'] = domain.domain
+            domains.append(domain_info)    
+        return domains
+
     def register_domain(self, uid, domain_name):
         if not self.check_domain(domain_name):
             raise DNSError(DNSErrors.UNALLOWED, "This domain is not hosted by us.")

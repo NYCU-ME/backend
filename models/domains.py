@@ -10,18 +10,21 @@ class Domains:
         self.session = Session()
 
     def get_domain(self, domain):
+        self.session.expire_all()
         domain = self.session.query(db.Domain).filter_by(domain=domain, status=1).all()
         if domain:
             return domain[0]
         return None
 
     def get_domain_by_id(self, domain_id):
+        self.session.expire_all()
         domain = self.session.query(db.Domain).filter_by(id=domain_id, status=1).all()
         if domain:
             return domain[0]
         return None
 
     def list_by_user(self, user):
+        self.session.expire_all()
         domains = self.session.query(db.Domain).filter_by(userId=user, status=1).all()
         return domains
 
