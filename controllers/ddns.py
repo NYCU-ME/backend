@@ -73,7 +73,7 @@ def addRecord(domain, type_, value):
         dnsService.add_record(domain_name, type_, value, ttl)
         return {"msg": "ok"}
     except Exception as e:
-        return {"error": e.msg}, 403
+        return {"msg": e.msg}, 403
 
 @app.route("/ddns/<path:domain>/records/<string:type_>/<string:value>", methods=['DELETE'])
 def delRecord(domain, type_, value):
@@ -93,4 +93,4 @@ def delRecord(domain, type_, value):
         dnsService.del_record(domain_name, type_, value)
         return {"msg": "ok"}
     except Exception as e:
-        return {"error": e.msg}, 403
+        return {"msg": e.msg}, 403

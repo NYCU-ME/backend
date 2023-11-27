@@ -16,7 +16,7 @@ def register_domain(domain):
         dnsService.register_domain(g.user['uid'], domain_name)
         return {"msg": "ok"}
     except Exception as e:
-        return {"error": e.msg}, 403
+        return {"msg": e.msg}, 403
 
 @app.route("/domains/<path:domain>", methods=['DELETE'])
 def release_domain(domain):
@@ -32,4 +32,4 @@ def release_domain(domain):
         dnsService.release_domain(domain_name)
         return {"msg": "ok"}
     except Exception as e:
-        return {"error": e.msg}, 403
+        return {"msg": e.msg}, 403
