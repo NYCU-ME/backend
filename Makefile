@@ -17,6 +17,12 @@ build:
 run:
 	docker compose up
 
+daemon:
+	docker compose up -d
+
+stop:
+	docker compose down
+
 run-test:
 	@docker compose -f docker-compose-test.yaml up -d
 	@docker events --filter 'event=die' > .event & echo $$! > .pidfile
