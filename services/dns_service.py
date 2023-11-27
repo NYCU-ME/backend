@@ -129,6 +129,6 @@ class DNSService():
         if not record:
             raise DNSError(DNSErrors.UNALLOWED, "This record does not exist.")
 
-        domain = self.domains.get_domain_by_id(record.domain_id)
+        domain = self.domains.get_domain_by_id(record.domain)
         self.records.del_record_by_id(record_id)
         self.ddns.del_record(domain.domain, record.type, record.value)
