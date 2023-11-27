@@ -18,14 +18,14 @@ class Records:
     def get_records(self, domain_id):
         session = self.Session()
         try:
-            return session.query(db.Record).filter_by(domain_id=domain_id, status=1).all()
+            return session.query(db.Record).filter_by(domain=domain_id, status=1).all()
         finally:
             session.close()
 
     def get_record_by_type_value(self, domain_id, type_, value):
         session = self.Session()
         try:
-            return session.query(db.Record).filter_by(domain_id=domain_id,
+            return session.query(db.Record).filter_by(domain=domain_id,
                                                       type=type_,
                                                       value=value,
                                                       status=1).first()
@@ -35,7 +35,7 @@ class Records:
     def add_record(self, domain_id, record_type, value, ttl):
         session = self.Session()
         try:
-            record = db.Record(domain_id=domain_id,
+            record = db.Record(domain=domain_id,
                                type=record_type,
                                value=value,
                                ttl=ttl,

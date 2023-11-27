@@ -29,14 +29,11 @@ class Domain(Base):
     expDate = Column(DateTime)
     status = Column(BOOLEAN, default=True)
 
-    # Relationships
-    records = relationship("Record", backref="domain")
-
 class Record(Base):
     __tablename__ = 'records'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    domain_id = Column(Integer, ForeignKey('domains.id'), nullable=False)
+    domain = Column(Integer, ForeignKey('domains.id'), nullable=False)
     type = Column(CHAR(16), nullable=False)
     value = Column(String(256))
     ttl = Column(Integer, nullable=False)
