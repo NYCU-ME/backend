@@ -1,34 +1,45 @@
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from . import db
 import logging
 
-
 class Users:
     def __init__(self, sql_engine):
-        Session = sessionmaker(bind=sql_engine)
-        self.session = Session()
-    
+        self.sql_engine = sql_engine
+        self.Session = scoped_session(sessionmaker(bind=self.sql_engine))
+
     def query(self, uid):
-        self.session.expire_all()
-        user = self.session.query(db.User).filter_by(id=uid).all()
-        if len(user):
-            return user[0]
-        return None
+        session = self.Session()
+        try:
+            user = session.query(db.User).filter_by(id=uid).first()
+            return user
+        except Exception as e:
+            logging.error(f"Error querying user: {e}")
+            return None
+        finally:
+            session.close() 
 
     def add(self, uid, name, username, password, status, email):
-        user = db.User(id=uid, 
-                       name=name, 
-                       username=username, 
-                       password=password, 
-                       status=status, 
-                       email=email)
-        self.session.add(user)
-        self.session.commit()
+        session = self.Session()
+        try:
+            user = db.User(id=uid, name=name, username=username, password=password, status=status, email=email)
+            session.add(user)
+            session.commit()
+        except Exception as e:
+            logging.error(f"Error adding user: {e}")
+            session.rollback()
+        finally:
+            session.close()
 
     def update_email(self, uid, email):
-        user = self.query(uid)
-        user.email = email
-        self.session.commit()
+        session = self.Session()
+        try:
+            user = session.query(db.User).filter_by(id=uid).first()
+            if user:
+                user.email = email
+                session.commit()
+        except Exception as e:
+            logging.error(f"Error updating user email: {e}")
+            session.rollback()
+        finally:
+            session.close()
 
-    def __del__(self):
-        self.session.close()

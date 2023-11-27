@@ -1,4 +1,4 @@
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime
 
 from . import db
@@ -6,39 +6,61 @@ from . import db
 
 class Records:
     def __init__(self, sql_engine):
-        Session = sessionmaker(bind=sql_engine)
-        self.session = Session()
+        self.sql_engine = sql_engine
+        self.Session = scoped_session(sessionmaker(bind=self.sql_engine))
 
     def get_record(self, record_id):
-        self.session.expire_all()
-        return self.session.query(db.Record).filter_by(id=record_id, status=1).first()
- 
+        session = self.Session()
+        try:
+            return session.query(db.Record).filter_by(id=record_id, status=1).first()
+        finally:
+            session.close()
+
     def get_records(self, domain_id):
-        self.session.expire_all()
-        return self.session.query(db.Record).filter_by(domain_id=domain_id, status=1).all()
+        session = self.Session()
+        try:
+            return session.query(db.Record).filter_by(domain_id=domain_id, status=1).all()
+        finally:
+            session.close()
 
     def get_record_by_type_value(self, domain_id, type_, value):
-        return self.session.query(db.Record).filter_by(domain_id=domain_id,
-                                                       type=type_,
-                                                       value=value,
-                                                       status=1).first()
+        session = self.Session()
+        try:
+            return session.query(db.Record).filter_by(domain_id=domain_id, 
+                                                      type=type_, 
+                                                      value=value, 
+                                                      status=1).first()
+        finally:
+            session.close()
 
     def add_record(self, domain_id, record_type, value, ttl):
-        now = datetime.now()
-        regDate = now
-        record = db.Record(domain_id=domain_id, 
-                        type=record_type, 
-                        value=value, 
-                        ttl=ttl, 
-                        regDate=regDate, 
-                        status=1)
-        self.session.add(record)
-        self.session.commit()
+        session = self.Session()
+        try:
+            record = db.Record(domain_id=domain_id,
+                               type=record_type,
+                               value=value,
+                               ttl=ttl,
+                               regDate=datetime.now(),
+                               status=1)
+            session.add(record)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
 
     def del_record_by_id(self, record_id):
-        records = self.session.query(db.Record).filter_by(id=record_id).all()
-        now = datetime.now()
-        for record in records:
-            record.status = 0
-            record.expDate = now
-        self.session.commit()
+        session = self.Session()
+        try:
+            record = session.query(db.Record).filter_by(id=record_id).first()
+            if record:
+                record.status = 0
+                record.expDate = datetime.now()
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
