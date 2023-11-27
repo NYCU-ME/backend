@@ -6,6 +6,9 @@
 # make pull
 # make init
 ```
+```
+# cp /NYCU-ME-backend/images/flask/app/config.py.sample /NYCU-ME-backend/images/flask/app/config.py
+```
 
 ## 運行
 
