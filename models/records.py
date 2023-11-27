@@ -1,8 +1,7 @@
-from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 from . import db
-
 
 class Records:
     def __init__(self, sql_engine):
@@ -26,9 +25,9 @@ class Records:
     def get_record_by_type_value(self, domain_id, type_, value):
         session = self.Session()
         try:
-            return session.query(db.Record).filter_by(domain_id=domain_id, 
-                                                      type=type_, 
-                                                      value=value, 
+            return session.query(db.Record).filter_by(domain_id=domain_id,
+                                                      type=type_,
+                                                      value=value,
                                                       status=1).first()
         finally:
             session.close()
@@ -63,4 +62,3 @@ class Records:
             raise e
         finally:
             session.close()
-
