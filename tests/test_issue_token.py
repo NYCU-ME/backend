@@ -6,7 +6,7 @@ from services.auth_service import AuthService
 from models import Users, Domains, db
 import config
 
-sql_engine = create_engine('sqlite:///:memory:') 
+sql_engine = create_engine('sqlite:///:memory:')
 db.Base.metadata.create_all(sql_engine)
 Session = sessionmaker(bind=sql_engine)
 session = Session()
@@ -21,10 +21,10 @@ testdata = [{'email':"lin.cs09@nycu.edu.tw",'username':"109550028"},
 def test_issue_token():
     for testcase in testdata:
         token = "Bearer " + authService.issue_token(testcase)
-        assert authService.authenticate_token(token) != None
+        assert authService.authenticate_token(token) is not None
         # test modified token
-        assert authService.authenticate_token(token + 'a')  == None 
+        assert authService.authenticate_token(token + 'a')  == None
         # test if data is written
-        session.expire_all() # flush orm cache
+        session.expire_all()# flush orm cache
         data = session.query(db.User).filter_by(id=testcase['username']).all()
         assert len(data) and data[0].email == testcase['email']

@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, Text, CHAR, BOOLEAN, UniqueConstraint
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String,\
+    Integer, DateTime, ForeignKey, Text, CHAR, BOOLEAN
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
