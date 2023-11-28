@@ -50,7 +50,7 @@ def check_type(type_, value):
 def addRecord(domain, type_, value):
 
     if not g.user:
-        return {"message": "Unauth."}, 401
+        return {"msg": "Unauth."}, 401
 
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
@@ -79,7 +79,7 @@ def addRecord(domain, type_, value):
 def delRecord(domain, type_, value):
 
     if not g.user:
-        return {"message": "Unauth."}, 401
+        return {"msg": "Unauth."}, 401
 
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))

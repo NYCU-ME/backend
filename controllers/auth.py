@@ -32,4 +32,4 @@ def whoami():
         data['email'] = g.user['email']
         data['domains'] = dnsService.list_domains_by_user(g.user['uid'])
         return data
-    return {"message": "Unauth."}, 401
+    return {"msg": "Unauth."}, 401

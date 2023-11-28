@@ -2,14 +2,19 @@ from flask import Response, request, g
 from main import app, authService, dnsService
 from services import Operation
 
+import logging
+
 @app.route("/domains/<path:domain>", methods=['POST'])
 def register_domain(domain):
 
     if not g.user:
-        return {"message": "Unauth."}, 401
+        return {"msg": "Unauth."}, 401
 
-    domain_struct = domain.lower().strip('/').split('/')
+    domain_struct = domain.replace('.', '/').lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
+
+    if dnsService.check_domain(domain_name) != len(domain_struct):
+        return {"msg": "You can only register specific level domain name."}, 400
 
     try:
         authService.authorize_action(g.user['uid'], Operation.APPLY, domain_name)
@@ -22,7 +27,7 @@ def register_domain(domain):
 def release_domain(domain):
 
     if not g.user:
-        return {"message": "Unauth."}, 401
+        return {"msg": "Unauth."}, 401
 
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
@@ -38,7 +43,7 @@ def release_domain(domain):
 def renew_domain(domain):
 
     if not g.user:
-        return {"message": "Unauth."}, 401
+        return {"msg": "Unauth."}, 401
 
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))

@@ -34,12 +34,14 @@ class AuthService:
         token['exp'] = (now) + 3600
         token['iat'] = token['nbf'] = now
         token['uid'] = token['username']
+        token['adm'] = False
 
         user = self.users.query(token['uid'])
 
         if user:
             if user.email != token['email']:
                 self.users.update_email(token['uid'], token['email'])
+            token['isAdmin'] = user.isAdmin
         else:
             self.users.add(uid=token['uid'], 
                            name='', 
@@ -78,7 +80,7 @@ class AuthService:
                 raise UnauthorizedError("You cannot apply for more domains.")
         if action == Operation.RELEASE:
             domain = self.domains.get_domain(domain_name)
-            if domain.userId != uid:
+            if not domain or domain.userId != uid:
                 raise UnauthorizedError("You cannot modify domain %s which you don't have." % (domain_name, ))
         if action == Operation.MODIFY:
             domain = self.domains.get_domain(domain_name)
