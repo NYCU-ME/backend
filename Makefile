@@ -10,6 +10,7 @@ init:
 	@rm -f ./config/named/keys/*.key
 	@rm -f ./config/named/keys/*.state
 	@rm -f ./config/named/keys/*.private
+	@rm -rf ./config/named/ddnskey.conf
 	@tsig-keygen -a hmac-sha512 ddnskey > ./config/named/ddnskey.conf
 
 build:

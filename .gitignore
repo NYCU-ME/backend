@@ -5,6 +5,7 @@ data/db
 *.key
 *.state
 *.private
+*.swp
 ddnskey.conf
 .event
 .pidfile
