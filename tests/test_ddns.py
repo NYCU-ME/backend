@@ -11,9 +11,9 @@ resolver = pydig.Resolver(
     ],
 )
 
-testdata_A = [("test.nycu-dev.me", 'A', "140.113.89.64", 5),
-              ("test.nycu-dev.me", 'A', "140.113.64.89", 5),
-              ("test2.nycu-dev.me", 'A', "140.113.69.69", 86400),
+testdata_A = [("test-ddns.nycu-dev.me", 'A', "140.113.89.64", 5),
+              ("test-ddns.nycu-dev.me", 'A', "140.113.64.89", 5),
+              ("test2-ddns.nycu-dev.me", 'A', "140.113.69.69", 86400),
 ]
 
 def test_add_A_record():
