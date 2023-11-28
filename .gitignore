@@ -5,3 +5,5 @@ data/db
 *.key
 *.private
 ddnskey.conf
+.event
+.pidfile
