@@ -3,6 +3,7 @@ data/db
 *.jnl
 *.signed
 *.key
+*.state
 *.private
 ddnskey.conf
 .event

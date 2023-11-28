@@ -5,10 +5,12 @@ pull:
 	git submodule update --init --recursive --remote
 
 init:
-	@chmod 777 ./data/zones
-	@rm -f ./config/named/keys/*
-	@./tools/genkeys.sh
-	@tsig-keygen -a hmac-sha512  ddnskey > ./config/named/ddnskey.conf
+	@chmod 777 ./data/zones/
+	@chmod 777 ./config/named/keys/
+	@rm -f ./config/named/keys/*.key
+	@rm -f ./config/named/keys/*.state
+	@rm -f ./config/named/keys/*.private
+	@tsig-keygen -a hmac-sha512 ddnskey > ./config/named/ddnskey.conf
 
 build:
 	docker compose build

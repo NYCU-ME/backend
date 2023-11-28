@@ -2,8 +2,8 @@ options {
 	directory "/var/cache/bind";
 
 	listen-on { any; };
-	allow-query     { any; };
-	recursion no;
+	allow-query { any; };
+	recursion yes;
 	
 	dnssec-validation yes;
 };
@@ -21,13 +21,8 @@ logging
     category security{ logger;};
     category queries { logger;};
     category default { logger;};
+    category dnssec { logger; };
 };
 
 include "/etc/bind/ddnskey.conf";
-
-controls {
-    inet 172.21.21.3 port 953
-    allow { 172.21.21.1; 172.21.21.0/24; 127.0.0.1; } keys { "ddnskey"; };
-};
-
 include "/etc/bind/zones.conf";
