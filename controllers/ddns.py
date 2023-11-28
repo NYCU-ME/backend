@@ -57,11 +57,11 @@ def addRecord(domain, type_, value):
 
     try:
         req = request.json
-        if req and 'ttl' in req and req['ttl'].isnumeric() and 5 <= int(req['ttl']) <= 86400:
+        if req and 'ttl' in req and 5 <= int(req['ttl']) <= 86400:
             ttl = int(req['ttl'])
         else:
             ttl = 5
-    except:
+    except Exception as e:
         ttl = 5
 
     check_result = check_type(type_, value)
