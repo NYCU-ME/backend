@@ -13,6 +13,9 @@ def register_domain(domain):
     domain_struct = domain.replace('.', '/').lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
 
+    if len(domain_struct[-1]) < 4:
+        return {"msg": "Length must be greater than 3."}, 400
+
     if dnsService.check_domain(domain_name) != len(domain_struct):
         return {"msg": "You can only register specific level domain name."}, 400
 
