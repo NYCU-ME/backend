@@ -33,3 +33,19 @@ def release_domain(domain):
         return {"msg": "ok"}
     except Exception as e:
         return {"msg": e.msg}, 403
+
+@app.route("/renew/<path:domain>", methods=['POST'])
+def renew_domain(domain):
+
+    if not g.user:
+        return {"message": "Unauth."}, 401
+
+    domain_struct = domain.lower().strip('/').split('/')
+    domain_name   = '.'.join(reversed(domain_struct))
+
+    try:
+        authService.authorize_action(g.user['uid'], Operation.RENEW, domain_name)
+        dnsService.renew_domain(domain_name)
+        return {"msg": "ok"}
+    except Exception as e:
+        return {"msg": e.msg}, 403
