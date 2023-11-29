@@ -14,6 +14,13 @@ services:
     networks:
       docker:
         ipv4_address: 172.21.21.2
+    depends_on:
+      - fluentd
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: db.sql
 
   named:
     image: ubuntu/bind9
@@ -26,6 +33,13 @@ services:
     networks:
       docker:
         ipv4_address: 172.21.21.3
+    depends_on:
+      - fluentd
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: named.dns
 
   flask_app:
     build: ./images/flask    
@@ -37,8 +51,14 @@ services:
       docker:
         ipv4_address: 172.21.21.4
     depends_on:
+      - fluentd
       - named
       - mysqld
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: backend.api
 
   backend_app:
     build: ./images/flask
@@ -49,8 +69,27 @@ services:
       docker:
         ipv4_address: 172.21.21.5
     depends_on:
+      - fluentd
       - mysqld
       - named
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: backend.thread
+
+  fluentd:
+    image: fluent/fluentd:v1.16.2-debian-1.1
+    container_name: fluentd
+    volumes:
+      - ./config/fluentd:/fluentd/etc
+      - ./data/logs:/fluentd/logs
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      docker:
+        ipv4_address: 172.21.21.6
 
 networks:
   docker:

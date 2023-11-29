@@ -5,6 +5,8 @@ pull:
 	git submodule update --init images/flask/app
 
 init:
+	@mkdir ./data/logs
+	@chmod 777 ./data/logs
 	@chmod 777 ./data/zones/
 	@chmod 777 ./config/named/keys/
 	@rm -f ./config/named/keys/*.key
@@ -52,3 +54,4 @@ rm-db:
 	rm -f data/zones/*.jbk
 	rm -f data/zones/*.jnl
 	rm -f data/zones/*.signed
+	rm -rf data/logs
