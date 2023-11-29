@@ -72,6 +72,9 @@ class DNSService():
                                            record.ttl))
         return domain_info
 
+    def get_expired_domain(self):
+        return self.domains.get_expired_domain()
+
     def list_domains_by_user(self, uid):
         domains = []
         for domain in self.domains.list_by_user(uid):
