@@ -5,7 +5,7 @@ from datetime import timedelta
 import time
 import logging
 
-from models import Domains, Records, Users, db, DDNS
+from models import Domains, Records, Users, Glues, db, DDNS
 from services import DNSService
 import config
 
@@ -22,8 +22,9 @@ session = Session()
 users = Users(sql_engine)
 domains = Domains(sql_engine)
 records = Records(sql_engine)
+glues = Glues(sql_engine)
 
-dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMAINS)
+dnsService = DNSService(logging, users, domains, glues, records, ddns, config.HOST_DOMAINS)
 
 def test_domain_expire():
     # Insert an expiring domain

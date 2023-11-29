@@ -15,8 +15,8 @@ class DDNS:
 
         if self.name_server:
             pr.stdin.write(f"server {self.name_server}\n".encode())
-        if self.zone:
-            pr.stdin.write(f"zone {self.zone}\n".encode())
+        #if self.zone:
+        #    pr.stdin.write(f"zone {self.zone}\n".encode())
 
         return pr
 

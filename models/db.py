@@ -40,3 +40,15 @@ class Record(Base):
     regDate = Column(DateTime)
     expDate = Column(DateTime)
     status = Column(BOOLEAN, default=True)
+
+class Glue(Base):
+    __tablename__ = 'glues'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    domain = Column(Integer, ForeignKey('domains.id'), nullable=False)
+    subdomain = Column(Text)
+    type = Column(CHAR(16), nullable=False)
+    value = Column(String(256))
+    regDate = Column(DateTime)
+    expDate = Column(DateTime)
+    status = Column(BOOLEAN, default=True)

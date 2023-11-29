@@ -1,11 +1,12 @@
 import logging
 import os
+import time
 from flask import Flask
 import flask_cors
 from sqlalchemy import create_engine
 
 import config
-from models import Users, Domains, Records, DDNS, db
+from models import Users, Domains, Records, Glues, DDNS, db
 from services import AuthService, DNSService, Oauth
 
 env_test = os.getenv('TEST')
@@ -32,12 +33,14 @@ ddns = DDNS(logging, config.DDNS_KEY, config.DDNS_SERVER, config.DDNS_ZONE)
 users = Users(sql_engine)
 domains = Domains(sql_engine)
 records = Records(sql_engine)
+glues = Glues(sql_engine)
+
 nycu_oauth = Oauth(redirect_uri = config.NYCU_OAUTH_RURL,
                    client_id = config.NYCU_OAUTH_ID,
                    client_secret = config.NYCU_OAUTH_KEY)
 
 authService = AuthService(logging, config.JWT_SECRET, users, domains)
-dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMAINS)
+dnsService = DNSService(logging, users, domains, records, glues, ddns, config.HOST_DOMAINS)
 
 @app.route("/")
 def index():

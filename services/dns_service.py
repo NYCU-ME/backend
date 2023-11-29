@@ -22,11 +22,12 @@ class DNSError(Exception):
         return f"{self.typ}: {self.msg}"
 
 class DNSService():
-    def __init__(self, logger, users, domains, records, ddns, host_domains):
+    def __init__(self, logger, users, domains, records, glues, ddns, host_domains):
         self.logger  = logger
         self.users = users
         self.domains = domains
         self.records = records
+        self.glues = glues
         self.ddns = ddns
         self.host_domains = host_domains
 
@@ -134,3 +135,21 @@ class DNSService():
         domain = self.domains.get_domain_by_id(record.domain)
         self.records.del_record_by_id(record_id)
         self.ddns.del_record(domain.domain, record.type, record.value)
+
+    def add_glue_record(self, domain_name, subdomain, type_, value):
+        domain = self.domains.get_domain(domain_name)
+        real_domain = f"{subdomain}.{domain_name}"
+        self.glues.add_record(domain.id, subdomain, type_, value)
+        self.ddns.add_record(real_domain, type_, value, 5)
+
+    def del_glue_record(self, domain_name, subdomain, type_, value):
+        domain = self.domains.get_domain(domain_name)
+        real_domain = f"{subdomain}.{domain_name}"
+        glue_record = self.glues.get_record_by_type_value(
+                domain.id,
+                subdomain,
+                type_,
+                value
+        )
+        self.glues.del_record(glue_record.id)
+        self.ddns.del_record(real_domain, type_, value)

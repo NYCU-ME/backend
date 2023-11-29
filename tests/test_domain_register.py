@@ -4,7 +4,7 @@ import logging
 import pydig
 import time
 
-from models import Domains, Records, Users, db, DDNS
+from models import Domains, Records, Users, Glues, db, DDNS
 from services import DNSService
 import config
 
@@ -26,8 +26,9 @@ session = Session()
 users = Users(sql_engine)
 domains = Domains(sql_engine)
 records = Records(sql_engine)
+glues = Glues(sql_engine)
 
-dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMAINS)
+dnsService = DNSService(logging, users, domains, records, glues, ddns, config.HOST_DOMAINS)
 
 testdata = [("test-reg.nycu-dev.me", 'A', "140.113.89.64", 5),
             ("test-reg.nycu-dev.me", 'A', "140.113.64.89", 5)]
@@ -81,3 +82,13 @@ def test_duplicated_record():
     except Exception:
         assert 1
     dnsService.release_domain("test-add-dup-rec.nycu-dev.me")
+
+def test_glue_record():
+    dnsService.register_domain("109550028", "test-glue.nycu-dev.me")
+    dnsService.add_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1")
+    time.sleep(5)
+    assert set(resolver.query("abc.test-glue.nycu-dev.me", 'A')) == {"1.1.1.1"}
+    dnsService.del_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1")
+    time.sleep(5)
+    assert set(resolver.query("abc.test-glue.nycu-dev.me", 'A')) == set()
+    dnsService.release_domain("test-glue.nycu-dev.me")
