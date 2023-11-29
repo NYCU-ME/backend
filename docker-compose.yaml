@@ -49,6 +49,7 @@ services:
       docker:
         ipv4_address: 172.21.21.5
     depends_on:
+      - mysqld
       - named
 
 networks:

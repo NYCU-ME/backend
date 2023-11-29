@@ -25,7 +25,7 @@ services:
 
   flask_app_test:
     build: ./images/flask
-    command: /bin/sh -c "pylint /opt/app --recursive=true ; pytest -vv -n 8 /opt/app"
+    command: /bin/sh -c "pylint /opt/app --recursive=true ; pytest -vv --full-trace --showlocals -n 8 /opt/app"
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
     networks:
