@@ -85,10 +85,17 @@ def test_duplicated_record():
 
 def test_glue_record():
     dnsService.register_domain("109550028", "test-glue.nycu-dev.me")
+
     dnsService.add_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1")
     time.sleep(5)
     assert set(resolver.query("abc.test-glue.nycu-dev.me", 'A')) == {"1.1.1.1"}
+    
     dnsService.del_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1")
     time.sleep(5)
     assert set(resolver.query("abc.test-glue.nycu-dev.me", 'A')) == set()
+    
+    # check if glue record is be removed after domain released
+    dnsService.add_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1")
     dnsService.release_domain("test-glue.nycu-dev.me")
+    time.sleep(5)
+    assert set(resolver.query("abc.test-glue.nycu-dev.me", 'A')) == set()

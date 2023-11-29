@@ -64,12 +64,19 @@ class DNSService():
         domain_info['expDate'] = domain.expDate
         domain_info['domain'] = domain_name
         domain_info['records'] = []
+        domain_info['glues'] = []
         records = self.records.get_records(domain.id)
+        glues = self.glues.get_records(domain.id)
         for record in records:
             domain_info['records'].append((record.id,
                                            record.type,
                                            record.value,
                                            record.ttl))
+        for record in glues:
+            glues.append((record.id,
+                          record.subdomain,
+                          record.type,
+                          record.value))
         return domain_info
 
     def get_expired_domain(self):
@@ -101,8 +108,11 @@ class DNSService():
         if not domain:
             raise DNSError(DNSErrors.NXDOMAIN, "This domain is not registered.")
         records = self.records.get_records(domain.id)
+        glues = self.glues.get_records(domain.id)
         for record in records:
             self.del_record_by_id(record.id)
+        for record in glues:
+            self.del_glue_record(domain.domain, record.subdomain, record.type, record.value)
         self.domains.release(domain_name)
 
     def add_record(self, domain_name, type_, value, ttl):

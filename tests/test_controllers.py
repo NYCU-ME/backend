@@ -147,6 +147,38 @@ def test_add_and_delete_records():
     )
     assert response.status_code == 200
 
+def test_auto_delete_glue_record():
+    
+    headers = get_headers("110550029")
+
+    response = requests.post(
+            URL_BASE + "domains/me/nycu-dev/test-glue-rec",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    
+    response = requests.post(
+            URL_BASE + "glue/me/nycu-dev/test-glue-rec/records/abc/A/1.1.1.1",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+
+    response = requests.delete(
+            URL_BASE + "glue/me/nycu-dev/test-glue-rec/records/abc/A/1.1.1.1",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    
+    response = requests.delete(
+            URL_BASE + "domains/me/nycu-dev/test-glue-rec",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+
 def test_add_ttl():
 
     headers = get_headers("109550032")

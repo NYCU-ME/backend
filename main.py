@@ -46,5 +46,4 @@ dnsService = DNSService(logging, users, domains, records, glues, ddns, config.HO
 def index():
     return "Hello World!"
 
-from controllers import auth, domains, ddns
-
+from controllers import auth, domains, ddns, glue
