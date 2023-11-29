@@ -8,7 +8,7 @@ DOMAIN_REGEX = re.compile(r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)$")
 class DNSErrors(Enum):
     NXDOMAIN             = "Non-ExistentDomain"
     DUPLICATED           = "DuplicatedRecord"
-    UNALLOWED            = "NotAllowedOperation" 
+    UNALLOWED            = "NotAllowedOperation"
 
 class DNSError(Exception):
     def __init__(self, typ, msg = ""):
@@ -19,7 +19,7 @@ class DNSError(Exception):
         return self.msg
 
     def __repr__(self):
-        return "%s: %s" % (self.typ, self.msg)
+        return f"{self.typ}: {self.msg}"
 
 class DNSService():
     def __init__(self, logger, users, domains, records, ddns, host_domains):
@@ -38,11 +38,10 @@ class DNSService():
                 return 0
 
         def is_match(rule, struct):
-            # Check if the domain is matching to a specific rule
             rule = list(reversed(rule.split('.')))
             if len(rule) > len(struct):
                 return 0
-            
+
             for i in range(len(rule)):
                 if rule[i] == '*':
                     return i + 1
@@ -76,7 +75,7 @@ class DNSService():
         domains = []
         for domain in self.domains.list_by_user(uid):
             domain_info = self.get_domain(domain.domain)
-            domains.append(domain_info)    
+            domains.append(domain_info)
         return domains
 
     def register_domain(self, uid, domain_name):
@@ -114,7 +113,7 @@ class DNSService():
 
         self.records.add_record(domain.id, type_, value, ttl)
         self.ddns.add_record(domain_name, type_, value, ttl)
-    
+
     def del_record(self, domain_name, type_, value):
         domain_id = self.domains.get_domain(domain_name).id
         record = self.records.get_record_by_type_value(domain_id,

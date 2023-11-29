@@ -9,13 +9,12 @@ class DDNS:
     def __launch(self):
         pr = subprocess.Popen(
             ['nsupdate', '-k', self.key_file],
-            bufsize = 0,
-            stdin   = subprocess.PIPE,
-            stdout  = subprocess.PIPE)
+            bufsize=0,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE)
 
         if self.name_server:
             pr.stdin.write(f"server {self.name_server}\n".encode())
-
         if self.zone:
             pr.stdin.write(f"zone {self.zone}\n".encode())
 
@@ -27,22 +26,20 @@ class DDNS:
             try:
                 while self.queue.qsize():
                     cmd = self.queue.get()
+                    if self.nsupdate.poll() is not None:
+                        self.nsupdate = self.__launch()
+                        logging.warning("Subprocess nsupdate is dead, relaunched.")
+
                     self.nsupdate.stdin.write((cmd + "\n").encode())
                     diff = 1
-                    logging.debug("executing command: {cmd}".format(cmd=cmd))
+                    logging.debug("executing command: %s", cmd)
 
-                    if self.nsupdate.poll():
-                        self.queue.put(cmd)
-                        self.nsupdate = self.__launch()
-                        logging.warning("Subprocess nsupdate is dead.")
-
-                if diff and self.nsupdate.poll() == None:
+                if diff and self.nsupdate.poll() is None:
                     diff = 0
                     self.nsupdate.stdin.write(b"send\n")
 
             except Exception as e:
-                logging.warning(e)
-                raise Exception(e)
+                logging.warning("Error in __write: %s", str(e))
 
             time.sleep(5)
 
@@ -61,10 +58,10 @@ class DDNS:
         if domain != "" and rectype != "" and value != "":
             if rectype == "TXT":
                 value = '"%s"' % value.replace('"', '\"')
-            self.queue.put("update add %s %d %s %s" % (domain, ttl, rectype, value))
+            self.queue.put(f"update add {domain} {ttl} {rectype} {value}")
 
     def del_record(self, domain, rectype, value):
         if domain != "":
             if rectype == "TXT":
                 value = '"%s"' % value.replace('"', '\"')
-            self.queue.put("update delete %s %s %s" % (domain, rectype, value))
+            self.queue.put(f"update delete {domain} {rectype} {value}")

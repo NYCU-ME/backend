@@ -1,7 +1,7 @@
-from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime, timedelta
-from . import db
 import logging
+from sqlalchemy.orm import sessionmaker, scoped_session
+from . import db
 
 class Domains:
     def __init__(self, sql_engine):
@@ -44,7 +44,7 @@ class Domains:
             session.add(domain)
             session.commit()
         except Exception as e:
-            logging.error(f"Error registering domain: {e}")
+            logging.error("Error registering domain: %s", e)
             session.rollback()
         finally:
             session.close()
@@ -57,7 +57,7 @@ class Domains:
                 domain.expDate = datetime.now() + timedelta(days=30)
                 session.commit()
         except Exception as e:
-            logging.error(f"Error renewing domain: {e}")
+            logging.error("Error renewing domain: %s", e)
             session.rollback()
         finally:
             session.close()
@@ -71,8 +71,7 @@ class Domains:
                 domain.status = 0
                 session.commit()
         except Exception as e:
-            logging.error(f"Error releasing domain: {e}")
+            logging.error("Error releasing domain: %s", e)
             session.rollback()
         finally:
             session.close()
-
