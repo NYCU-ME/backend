@@ -60,6 +60,7 @@ CREATE TABLE `glues` (
       `domain` int(11) NOT NULL,
       `subdomain` text,
       `type` char(16) NOT NULL,
+      `ttl` int(11) NOT NULL,
       `value` varchar(256) DEFAULT NULL,
       `regDate` datetime DEFAULT NULL,
       `expDate` datetime DEFAULT NULL,
