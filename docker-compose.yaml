@@ -40,6 +40,17 @@ services:
       - named
       - mysqld
 
+  backend_app:
+    build: ./images/flask
+    command: ["python3", "launch_thread.py"]
+    volumes:
+      - ./config/named/ddnskey.conf:/etc/ddnskey.conf
+    networks:
+      docker:
+        ipv4_address: 172.21.21.5
+    depends_on:
+      - named
+
 networks:
   docker:
     ipam:

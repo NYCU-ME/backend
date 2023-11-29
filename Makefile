@@ -11,7 +11,9 @@ init:
 	@rm -f ./config/named/keys/*.state
 	@rm -f ./config/named/keys/*.private
 	@rm -rf ./config/named/ddnskey.conf
+	@cp ./images/flask/app/config.py.sample ./images/flask/app/config.py
 	@tsig-keygen -a hmac-sha512 ddnskey > ./config/named/ddnskey.conf
+	@git rm ./data/zones/nycu.me.db --cached
 
 build:
 	docker compose build
