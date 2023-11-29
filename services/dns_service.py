@@ -73,10 +73,11 @@ class DNSService():
                                            record.value,
                                            record.ttl))
         for record in glues:
-            glues.append((record.id,
-                          record.subdomain,
-                          record.type,
-                          record.value))
+            domain_info['glues'].append((record.id,
+                                         record.subdomain,
+                                         record.type,
+                                         record.value,
+                                         record.ttl))
         return domain_info
 
     def get_expired_domain(self):
