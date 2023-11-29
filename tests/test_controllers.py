@@ -1,11 +1,9 @@
 import json
+import logging
 import time
 import requests
 import pydig
 from .test_common import get_headers, URL_BASE
-
-
-
 
 resolver = pydig.Resolver(
     executable='/usr/bin/dig',
@@ -13,6 +11,29 @@ resolver = pydig.Resolver(
         '172.21.21.3'
     ],
 )
+
+def test_add_ttl():
+    
+    headers = get_headers("109550032")
+    
+    def test_ttl(ttl, answer):
+        # Add record for ttl 10
+        response = requests.post(URL_BASE + "ddns/me/nycu-dev/test-ttl1/records/A/140.113.89.64", json = {'ttl': ttl}, headers = headers)
+        assert response.status_code == 200
+        response = requests.get(URL_BASE + "whoami/", headers = headers)
+        assert response.status_code == 200
+        for domain in json.loads(response.text)['domains']:
+            if domain['domain'] == 'test-ttl1.nycu-dev.me':
+                assert domain['records'][0][3] == answer
+        response = requests.delete(URL_BASE + "ddns/me/nycu-dev/test-ttl1/records/A/140.113.89.64", headers = headers)
+
+    # Register domains
+    response = requests.post(URL_BASE + "domains/me/nycu-dev/test-ttl1", headers = headers)
+    test_ttl(1, 5)
+    test_ttl(10, 10)
+    test_ttl(86401, 5)
+    test_ttl("random_string", 5)
+    response = requests.delete(URL_BASE + "domains/me/nycu-dev/test-ttl1", headers = headers)
 
 def test_register_and_release_domain():
     headers = get_headers("109550004")
@@ -56,3 +77,27 @@ def test_add_and_delete_records():
     assert response.status_code == 200
     response = requests.delete(URL_BASE + "ddns/me/nycu-dev/test-route-rec/records/A/140.113.64.89", headers = headers)
     assert response.status_code == 200
+
+def test_add_ttl():
+    
+    headers = get_headers("109550032")
+    
+    def test_ttl(ttl, answer):
+        # Add record for ttl 10
+        response = requests.post(URL_BASE + "ddns/me/nycu-dev/test-ttl1/records/A/140.113.89.64", json = {'ttl': ttl}, headers = headers)
+        assert response.status_code == 200
+        response = requests.get(URL_BASE + "whoami/", headers = headers)
+        assert response.status_code == 200
+        for domain in json.loads(response.text)['domains']:
+            if domain['domain'] == 'test-ttl1.nycu-dev.me':
+                assert domain['records'][0][3] == answer
+        response = requests.delete(URL_BASE + "ddns/me/nycu-dev/test-ttl1/records/A/140.113.89.64", headers = headers)
+
+    # Register domains
+    response = requests.post(URL_BASE + "domains/me/nycu-dev/test-ttl1", headers = headers)
+    test_ttl(1, 5)
+    test_ttl(10, 10)
+    test_ttl(86401, 5)
+    test_ttl("random_string", 5)
+    response = requests.delete(URL_BASE + "domains/me/nycu-dev/test-ttl1", headers = headers)
+

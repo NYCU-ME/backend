@@ -10,4 +10,5 @@ def get_headers(uid):
     }
     response = requests.get(URL_BASE + "test_auth/", json = data)
     token = json.loads(response.text)['token']
-    return {'Authorization': 'Bearer ' + token}
+    headers = {'Authorization': f'Bearer {token}'}
+    return headers
