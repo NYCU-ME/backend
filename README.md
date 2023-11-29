@@ -6,8 +6,10 @@
 # make pull
 # make init
 ```
+
+## 建構
 ```
-# cp /NYCU-ME-backend/images/flask/app/config.py.sample /NYCU-ME-backend/images/flask/app/config.py
+# sudo make build
 ```
 
 ## 運行
