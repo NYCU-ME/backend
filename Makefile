@@ -2,7 +2,7 @@
 
 pull:
 	git pull
-	git submodule update --init --recursive --remote
+	git submodule update --init images/flask/app
 
 init:
 	@chmod 777 ./data/zones/
