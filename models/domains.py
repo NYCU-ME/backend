@@ -16,6 +16,15 @@ class Domains:
         finally:
             session.close()
 
+    def get_expired_domain(self):
+        session = self.make_session()
+        try:
+            now = datetime.now()
+            domain = session.query(db.Domain).filter_by(status=1).filter(db.Domain.expDate < now).first()
+            return domain
+        finally:
+            session.close()
+
     def get_domain_by_id(self, domain_id):
         session = self.make_session()
         try:
