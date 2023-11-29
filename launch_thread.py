@@ -1,10 +1,16 @@
 import logging
 import os
+import time
 from sqlalchemy import create_engine
 
 import config
 from models import Users, Domains, Records, DDNS, db
-from services import DNSService
+from services import AuthService, DNSService
+
+def recycle():
+    while (domain := dnsService.get_expired_domain()) != None:
+        logging.info(f"recycling {domain.domain}")
+        dnsService.release_domain(domain.domain)
 
 env_test = os.getenv('TEST')
 
@@ -31,8 +37,7 @@ records = Records(sql_engine)
 authService = AuthService(logging, config.JWT_SECRET, users, domains)
 dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMAINS)
 
-while True:
-    expired_domains = dnsService.get_expired_domains()
-    for domain in expired_domains:
-        dnsService.release_domain(domain.domain)
-
+if __name__ == "__main__":
+    while True:
+        recycle()
+        time.sleep(1)
