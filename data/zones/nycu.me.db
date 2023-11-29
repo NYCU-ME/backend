@@ -1,15 +1,15 @@
 $ORIGIN .
 $TTL 5  ; 5 seconds
 nycu-dev.me         IN SOA      ns1.nycu-dev.me. admin.nycu-dev.me. (
-                                2023021081 ; serial
+                                2023021091 ; serial
                                 5          ; refresh (5 seconds)
                                 30         ; retry (30 seconds)
                                 1209600    ; expire (2 weeks)
                                 5          ; minimum (5 seconds)
                                 )
                         NS      ns1.nycu-dev.me.
-                        A       103.179.29.11
+                        A       103.179.29.10
 $ORIGIN nycu-dev.me.
 $TTL 5  ; 5 seconds
-ns1                     A       103.179.29.11
-www                     A       103.179.29.11
+ns1                     A       103.179.29.10
+www                     A       103.179.29.10

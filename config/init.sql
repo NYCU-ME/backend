@@ -55,3 +55,17 @@ CREATE TABLE `records` (
       CONSTRAINT `records_ibfk_1` FOREIGN KEY (`domain`) REFERENCES `domains` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `glues` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `domain` int(11) NOT NULL,
+      `subdomain` text,
+      `type` char(16) NOT NULL,
+      `value` varchar(256) DEFAULT NULL,
+      `regDate` datetime DEFAULT NULL,
+      `expDate` datetime DEFAULT NULL,
+      `status` tinyint(1) DEFAULT '1',
+      KEY `domain_idx` (`domain`),
+      PRIMARY KEY (`id`),
+      CONSTRAINT `glues_ibfk_1` FOREIGN KEY (`domain`) REFERENCES `domains` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
