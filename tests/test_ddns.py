@@ -1,7 +1,7 @@
-import models.ddns
 import logging
-import pydig
 import time
+import pydig
+import models.ddns
 
 ddns = models.ddns.DDNS(logging, "/etc/ddnskey.conf", "172.21.21.3", "nycu-dev.me")
 resolver = pydig.Resolver(
@@ -19,15 +19,15 @@ testdata_A = [("test-ddns.nycu-dev.me", 'A', "140.113.89.64", 5),
 def test_add_A_record():
     domains = {}
     for testcase in testdata_A:
-        ddns.add_record(*testcase);
+        ddns.add_record(*testcase)
         if testcase[0] not in domains:
             domains[testcase[0]] = set()
-        domains[testcase[0]].add(testcase[2]);
+        domains[testcase[0]].add(testcase[2])
     time.sleep(5)
-    for domain in domains:
-        assert set(resolver.query(domain, 'A')) == domains[domain]
+    for domain, expected_value in domains.items():
+        assert set(resolver.query(domain, 'A')) == expected_value
     for testcase in testdata_A:
         ddns.del_record(*testcase[:-1])
     time.sleep(5)
     for domain in domains:
-        assert resolver.query(domain, 'A') == []
+        assert not resolver.query(domain, 'A')
