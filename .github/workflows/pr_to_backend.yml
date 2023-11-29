@@ -1,0 +1,32 @@
+name: Submodule updates to a parent repo
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  update:
+    name: Update submodules
+    runs-on: ubuntu-latest
+    environment: LinLee
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          repository: NYCU-ME/backend
+          token: ${{ secrets.TOKEN }}
+
+      - name: Update submodules recursively
+        run: |
+          git submodule update --init --recursive
+          git submodule update --recursive --remote
+
+      - name: Commit the changes
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions - update submodules"
+          git add --all
+          git commit -m "Update submodules" || echo "No changes to commit"
+          git push
+
+
