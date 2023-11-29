@@ -1,4 +1,5 @@
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import func
 from datetime import datetime, timedelta
 from . import db
 import logging
@@ -15,6 +16,16 @@ class Domains:
             return domain
         finally:
             session.close()
+
+        def get_expired_domain(self, domain_name):
+            session = self.make_session()
+            try:
+                now = func.now()
+                domains = session.query(db.Domain).filter_by(domain=domain_name, status=1).filter(db.Domain.expDate <= now).all()
+
+                return domains
+            finally:
+                session.close()
 
     def get_domain_by_id(self, domain_id):
         session = self.make_session()

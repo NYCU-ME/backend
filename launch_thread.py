@@ -1,17 +1,12 @@
 import logging
 import os
-from flask import Flask
-import flask_cors
 from sqlalchemy import create_engine
 
 import config
 from models import Users, Domains, Records, DDNS, db
-from services import AuthService, DNSService, Oauth
+from services import DNSService
 
 env_test = os.getenv('TEST')
-
-app = Flask(__name__)
-flask_cors.CORS(app)
 
 sql_engine = None
 if env_test is not None:
@@ -32,16 +27,12 @@ ddns = DDNS(logging, config.DDNS_KEY, config.DDNS_SERVER, config.DDNS_ZONE)
 users = Users(sql_engine)
 domains = Domains(sql_engine)
 records = Records(sql_engine)
-nycu_oauth = Oauth(redirect_uri = config.NYCU_OAUTH_RURL,
-                   client_id = config.NYCU_OAUTH_ID,
-                   client_secret = config.NYCU_OAUTH_KEY)
 
 authService = AuthService(logging, config.JWT_SECRET, users, domains)
 dnsService = DNSService(logging, users, domains, records, ddns, config.HOST_DOMAINS)
 
-@app.route("/")
-def index():
-    return "Hello World!"
-
-from controllers import auth, domains, ddns
+while True:
+    expired_domains = dnsService.get_expired_domains()
+    for domain in expired_domains:
+        dnsService.release_domain(domain.domain)
 
