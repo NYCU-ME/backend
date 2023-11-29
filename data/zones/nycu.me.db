@@ -1,97 +1,15 @@
 $ORIGIN .
-$TTL 5	; 5 seconds
-nycu.me			IN SOA	ns1.nycu.me. admin.nycu.me. (
-				2022021081 ; serial
-				5          ; refresh (5 seconds)
-				30         ; retry (30 seconds)
-				1209600    ; expire (2 weeks)
-				5          ; minimum (5 seconds)
-				)
-			RRSIG	SOA 13 2 5 (
-				20231212124354 20231128114354 46224 nycu.me.
-				NbirIFKzDoDv0ZLcgh8f2fIJx/jEQ5Hg2KHx7xzsGuav
-				KTMltknYMgFCVZLuSQSJZb7C4ycUDal7DE4/ngaijg== )
-			NS	ns1.nycu.me.
-			RRSIG	NS 13 2 5 (
-				20231204111256 20231128104832 46224 nycu.me.
-				0b8BSGlucMtL/9lXsM/OJ/LAJUX4bvJPBysNSdDlAS45
-				FvPFxF+X02kSTdusb1iIvDjsQCk/Hb2NbfpKVAQJuQ== )
-			A	103.179.29.10
-			RRSIG	A 13 2 5 (
-				20231204111256 20231128104832 46224 nycu.me.
-				Q0tOzJwx07dJrfraRuCRPvUU+LPkdiGB62A8pG/nWnDt
-				Apkbyo1Sgr58IkQ65Glu3z5Lan6Yi2wrucwFPQ0Qyg== )
-			NSEC	api.nycu.me. A NS SOA RRSIG NSEC DNSKEY TYPE65534
-			RRSIG	NSEC 13 2 5 (
-				20231211024442 20231128104832 46224 nycu.me.
-				XppBGp7XdGeXwdePwnphk96uMXQCXq0n01Zz8OE0YrDG
-				XJMTIuhaKerqOx00/CSvS1Rgh51ePHxYe1UsJgTBog== )
-$TTL 3600	; 1 hour
-			DNSKEY	257 3 13 (
-				NrMzUltVKiR9cyMQZypsJFP+SvBMsKumjqJdAO20Cx7R
-				QNoaf0gcnsXXTVpfqtd1VOVM3TN6zjBlHNxOjR3N6g==
-				) ; KSK; alg = ECDSAP256SHA256 ; key id = 46224
-			RRSIG	DNSKEY 13 2 3600 (
-				20231212114832 20231128104832 46224 nycu.me.
-				iHlFjWgOqF2tjAc+/wpDbGZyOZ/rhwEE7WFRIxR5W+U4
-				vSVbH7QVbFk8QCA5gIVt2hKuYoPMJPvua9bFWA/l2w== )
-$TTL 0	; 0 seconds
-			TYPE65534 \# 5 ( 0DB4900001 )
-			RRSIG	TYPE65534 13 2 0 (
-				20231211024442 20231128104832 46224 nycu.me.
-				akp7uJMenH652GWJj6AmepI/Pxg2t3V8DK7HqNE09whr
-				kriRyomjO9wBQVJPiYP9c86Rn31eUG1IbgCLzxFf0A== )
-$ORIGIN nycu.me.
-$TTL 5	; 5 seconds
-api			A	103.179.29.10
-			RRSIG	A 13 3 5 (
-				20231204111256 20231128104832 46224 nycu.me.
-				3qRHE7Kyn8ghxjzkQVoUAqhkl7zD8PAVF4QOCWunOkh3
-				oeC6WQ5vpws+cXsoYi1aik8QtVR3qg43/TuRVB408Q== )
-			NSEC	ns1.nycu.me. A RRSIG NSEC
-			RRSIG	NSEC 13 3 5 (
-				20231204111256 20231128104832 46224 nycu.me.
-				y6knW7zvTyLifFxP2BBlNCTzpw5FLPf1mtzyOA5NZ3OM
-				KtsjlqrHj2E7AK/09vdy262Ez+V8I790Trd+SxuHZQ== )
-$TTL 10800	; 3 hours
-ns1			A	103.179.29.10
-			RRSIG	A 13 3 10800 (
-				20231204111256 20231128104832 46224 nycu.me.
-				Rhwm47Iul2GixbmSLDIRnep2zVMGJlS2cIIlLIgP5Qi/
-				TzQq7eg/HJiqDkQoVlxcXqOb5xk+grFivPUYiuMuEg== )
-$TTL 5	; 5 seconds
-			NSEC	test.nycu.me. A RRSIG NSEC
-			RRSIG	NSEC 13 3 5 (
-				20231210202253 20231128113409 46224 nycu.me.
-				cPh5vDF8y1zEjzRNdEvz8ZA+6q7DjLMnHi9K5mJp3tRA
-				uUIhDfE3bTgGgBdWYSGCNQwmihtXHlCyF0X4HZXrJA== )
-test			A	1.1.1.1
-			RRSIG	A 13 3 5 (
-				20231210202253 20231128113409 46224 nycu.me.
-				wrWTAN30/UDnA4nTcrLYaXVgIno9KmA/52Jfcu/92/rJ
-				lrTgdpTN0eJcCZtD3I+VvAhTnNbRR69Ar1+fv2utLA== )
-			NSEC	test2.nycu.me. A RRSIG NSEC
-			RRSIG	NSEC 13 3 5 (
-				20231209033508 20231128114354 46224 nycu.me.
-				0uggXbQPJYhKNtsE5fRfOXaBcyC2QC+SY28v6+rrlRyb
-				MJ+osdRr/gI8kIEp6HWA1Fxglsl5rGIYRs4a/xiYfg== )
-test2			TXT	"r"
-			RRSIG	TXT 13 3 5 (
-				20231209033508 20231128114354 46224 nycu.me.
-				RhCfOUSmtmVeqewa4hnJfiOcMmpFE/YYdNCY4fT6+vFE
-				1DwK4dsW73OFNb0wP5EDBeWpfFHdot0wE6NzDELCdA== )
-			NSEC	www.nycu.me. TXT RRSIG NSEC
-			RRSIG	NSEC 13 3 5 (
-				20231209033508 20231128114354 46224 nycu.me.
-				P8B3nwTdMfGHXvYdiXNYtVtN1mDUzWjGZhLJ/puMGHbj
-				bNBG3Gd9bd/H59EzVK6HqX8+I5lnab/GpX6hU0T5bA== )
-www			A	103.179.29.10
-			RRSIG	A 13 3 5 (
-				20231204111256 20231128104832 46224 nycu.me.
-				JmC8kHux2H1tTY6wAxslP3cArySZT65NNL0KNyZP57SC
-				lZuhymlwVBgCN7nvF/myrwj5HV3gtqe8hFkuH1mhXQ== )
-			NSEC	nycu.me. A RRSIG NSEC
-			RRSIG	NSEC 13 3 5 (
-				20231204111256 20231128104832 46224 nycu.me.
-				qxoVk3VaP0+Pg9xUwYpwxIWTiMyu7uHMq/FYDmhpMuLv
-				+rzBS1mzoeGBCKPj4ug9KJI8rJszIxHw0uD/+3gkEg== )
+$TTL 5  ; 5 seconds
+nycu-dev.me         IN SOA      ns1.nycu-dev.me. admin.nycu-dev.me. (
+                                2023021081 ; serial
+                                5          ; refresh (5 seconds)
+                                30         ; retry (30 seconds)
+                                1209600    ; expire (2 weeks)
+                                5          ; minimum (5 seconds)
+                                )
+                        NS      ns1.nycu-dev.me.
+                        A       103.179.29.11
+$ORIGIN nycu-dev.me.
+$TTL 5  ; 5 seconds
+ns1                     A       103.179.29.11
+www                     A       103.179.29.11
