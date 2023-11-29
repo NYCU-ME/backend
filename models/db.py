@@ -48,6 +48,7 @@ class Glue(Base):
     domain = Column(Integer, ForeignKey('domains.id'), nullable=False)
     subdomain = Column(Text)
     type = Column(CHAR(16), nullable=False)
+    ttl = Column(Integer, nullable=False)
     value = Column(String(256))
     regDate = Column(DateTime)
     expDate = Column(DateTime)

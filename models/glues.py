@@ -33,10 +33,10 @@ class Glues:
         finally:
             session.close()
 
-    def add_record(self, domain_id, subdomain, type_, value):
+    def add_record(self, domain_id, subdomain, type_, value, ttl):
         session = self.Session()
         try:
-            new_record = db.Glue(domain=domain_id, subdomain=subdomain, type=type_, value=value, status=1, regDate=datetime.now())
+            new_record = db.Glue(domain=domain_id, subdomain=subdomain, type=type_, value=value, ttl=ttl, status=1, regDate=datetime.now())
             session.add(new_record)
             session.commit()
             return new_record

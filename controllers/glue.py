@@ -77,13 +77,22 @@ def add_glue_record(domain, subdomain, type_, value):
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
 
+    try:
+        req = request.json
+        if req and 'ttl' in req and 5 <= int(req['ttl']) <= 86400:
+            ttl = int(req['ttl'])
+        else:
+            ttl = 5
+    except Exception:
+        ttl = 5
+
     check_result = check_type(type_, value)
     if check_result:
         return check_result
 
     try:
         authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
-        dnsService.add_glue_record(domain_name, subdomain, type_, value)
+        dnsService.add_glue_record(domain_name, subdomain, type_, value, ttl)
         return {"msg": "ok"}
     except Exception as e:
         return {"msg": str(e)}, 403

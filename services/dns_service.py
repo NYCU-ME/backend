@@ -146,11 +146,11 @@ class DNSService():
         self.records.del_record_by_id(record_id)
         self.ddns.del_record(domain.domain, record.type, record.value)
 
-    def add_glue_record(self, domain_name, subdomain, type_, value):
+    def add_glue_record(self, domain_name, subdomain, type_, value, ttl):
         domain = self.domains.get_domain(domain_name)
         real_domain = f"{subdomain}.{domain_name}"
-        self.glues.add_record(domain.id, subdomain, type_, value)
-        self.ddns.add_record(real_domain, type_, value, 5)
+        self.glues.add_record(domain.id, subdomain, type_, value, ttl)
+        self.ddns.add_record(real_domain, type_, value, ttl)
 
     def del_glue_record(self, domain_name, subdomain, type_, value):
         domain = self.domains.get_domain(domain_name)
