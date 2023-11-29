@@ -9,3 +9,4 @@ data/db
 ddnskey.conf
 .event
 .pidfile
+nycu.me.db
