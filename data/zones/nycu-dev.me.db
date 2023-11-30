@@ -1,65 +1,15 @@
 $ORIGIN .
 $TTL 5	; 5 seconds
 nycu-dev.me		IN SOA	ns1.nycu-dev.me. admin.nycu-dev.me. (
-				2023021089 ; serial
+				2023021090 ; serial
 				5          ; refresh (5 seconds)
 				30         ; retry (30 seconds)
 				1209600    ; expire (2 weeks)
 				5          ; minimum (5 seconds)
 				)
-			RRSIG	SOA 13 2 5 (
-				20231213152736 20231129142736 7337 nycu-dev.me.
-				47iwgCJ0Lty5dLhC2v+zCYER490huwW1+tbJ9V8tQcp6
-				KLMMX/0BasIxiog8l5NAQiVGwbbrKDqsX+e9aQEy6w== )
 			NS	ns1.nycu-dev.me.
-			RRSIG	NS 13 2 5 (
-				20231206094442 20231129140935 7337 nycu-dev.me.
-				rZCy7aOk0qN1lAWciuRuxFUhEweZN3Fvg8rVHp1GPp0D
-				mIEFlPqQK4PftNBo2aTxczWD8YCXoZD4J0AISPHa5g== )
 			A	103.179.29.11
-			RRSIG	A 13 2 5 (
-				20231206094442 20231129140935 7337 nycu-dev.me.
-				O8CCpQJd0uJPvKF5tHqmf3dMpWv6+u0JIx29TAlZ/cu/
-				klSY1kLVSK3HY2UTgbdUqrWHV+bNmtqB2VZhWf87Rg== )
-			NSEC	ns1.nycu-dev.me. A NS SOA RRSIG NSEC DNSKEY TYPE65534
-			RRSIG	NSEC 13 2 5 (
-				20231206094442 20231129140935 7337 nycu-dev.me.
-				3vqdGEy+Fx9D4FuWiao3GkDppAPwPna4vuqU0LaDrP3a
-				e006p+ZCma5Y/ucHzIP0wZzW/LjBeE3WTMqaEohmoA== )
-$TTL 3600	; 1 hour
-			DNSKEY	257 3 13 (
-				yrdNsbEhlTFMpSVRiha51OK5iY9PhmcwZL3EkgDfcs1O
-				yNNFNQyr79vrzKnjRUJgpqgpblsozElua9Jz7kdMCg==
-				) ; KSK; alg = ECDSAP256SHA256 ; key id = 7337
-			RRSIG	DNSKEY 13 2 3600 (
-				20231213150935 20231129140935 7337 nycu-dev.me.
-				nmqbe9nwVT8kwVq6MNMzoQPSc/tUI0361ZSY23YE8uRf
-				cAAOKGcS56RSuji5PMvI87M8QFjpqg/UAexuFDvelg== )
-$TTL 0	; 0 seconds
-			TYPE65534 \# 5 ( 0D1CA90001 )
-			RRSIG	TYPE65534 13 2 0 (
-				20231206094442 20231129140935 7337 nycu-dev.me.
-				rwxj5bhIY82Drs/LZSan3USBWD07uXTQ6VW+pdH6Wny3
-				e1zDGpqGhfxGN9t5vpdUsZHAvaWkpmQXIROonUo8eQ== )
 $ORIGIN nycu-dev.me.
 $TTL 5	; 5 seconds
 ns1			A	103.179.29.11
-			RRSIG	A 13 3 5 (
-				20231206094442 20231129140935 7337 nycu-dev.me.
-				rqSHlCdeXO7H4boje4Vqa364qzsn8syyjZZ9yVnxNihm
-				FZE2VgN1IdsdzeeVIiRf7bw5/lYsvxfQ8rAGdNJvLA== )
-			NSEC	www.nycu-dev.me. A RRSIG NSEC
-			RRSIG	NSEC 13 3 5 (
-				20231212032723 20231129142736 7337 nycu-dev.me.
-				okHJ7G7rj9Fx9fxED70M+HqF+tumNL8sNSAd7QoSY7CV
-				Po1+cJInaKN2qqMmnO+L86m/6WfF5DfHBvWuGnXMqQ== )
 www			A	103.179.29.11
-			RRSIG	A 13 3 5 (
-				20231206094442 20231129140935 7337 nycu-dev.me.
-				lIl64GzzvCS8TT4ljsIkMto1DzWzSiziFnDtPxpHxIpY
-				Lq12Wpg7/0eDM5Db+8Z8BzDFY7a1MVjC3mPPyKNBhw== )
-			NSEC	nycu-dev.me. A RRSIG NSEC
-			RRSIG	NSEC 13 3 5 (
-				20231206094442 20231129140935 7337 nycu-dev.me.
-				IwsdKTNe4WSaQQ1gQS4wzZukombEFM+ArZjIcXBBTAyQ
-				o/95amxq/k13xmh206vPL3UP9/lk0+m4z/80cGSKsg== )
