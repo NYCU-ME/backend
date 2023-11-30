@@ -1,5 +1,6 @@
 data/db
 data/logs
+data/elastic*
 *.jbk
 *.jnl
 *.signed

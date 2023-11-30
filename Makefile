@@ -5,7 +5,9 @@ pull:
 	git submodule update --init images/flask/app
 
 init:
+	@mkdir ./data/elasticsearch
 	@mkdir ./data/logs
+	@chmod 777 ./data/elasticsearch
 	@chmod 777 ./data/logs
 	@chmod 777 ./data/zones/
 	@chmod 777 ./config/named/keys/
@@ -55,3 +57,4 @@ rm-db:
 	rm -f data/zones/*.jnl
 	rm -f data/zones/*.signed
 	rm -rf data/logs
+	rm -rf data/elasticsearch
