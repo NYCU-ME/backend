@@ -17,5 +17,10 @@ DDNS_KEY     = r"/etc/ddnskey.conf"
 DDNS_SERVER  = r"172.21.21.3"
 DDNS_ZONE    = r"nycu-dev.me"
 
+#ElasticSearch
+ELASTICSERVER=172.21.21.7
+ELASTICUSER=elastic
+ELASTICPASS=abc123
+
 #General
 HOST_DOMAINS = [r"*.nycu-dev.me"]

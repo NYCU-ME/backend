@@ -6,7 +6,7 @@ import flask_cors
 from sqlalchemy import create_engine
 
 import config
-from models import Users, Domains, Records, Glues, DDNS, db
+from models import Users, Domains, Records, Glues, DDNS, Elastic, db
 from services import AuthService, DNSService, Oauth
 
 env_test = os.getenv('TEST')
@@ -39,6 +39,7 @@ nycu_oauth = Oauth(redirect_uri = config.NYCU_OAUTH_RURL,
                    client_id = config.NYCU_OAUTH_ID,
                    client_secret = config.NYCU_OAUTH_KEY)
 
+elastic = Elastic(config.ELASTICSERVER, config.ELASTICUSER, config.ELASTICPASS)
 authService = AuthService(logging, config.JWT_SECRET, users, domains)
 dnsService = DNSService(logging, users, domains, records, glues, ddns, config.HOST_DOMAINS)
 
