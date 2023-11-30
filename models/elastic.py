@@ -9,17 +9,22 @@ class Elastic():
         self.user = user
         self.password = password
 
-    def query_logs_count_by_date(self, domain, date):
+    def query(self, domain, date):
         url = f"http://{self.server}:9200/fluentd.named.dns/_search?pretty=true"
         headers = {"Content-Type": "application/json"}
         auth = (self.user, self.password)
+
         data = {
-            "size": 0, 
+            "size": 0,
             "query": {
                 "bool": {
                     "must": [
-                        {"query_string": {"query": f"*{domain}*"}},
-                        {"range": {"log_date": {"gte": date, "lte": date}}}
+                        {"match_phrase": {"log": f"({domain})"}},
+                    ],
+                    "filter": [
+                        {
+                            "term": {"log_time": date}
+                        }
                     ]
                 }
             }
