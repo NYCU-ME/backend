@@ -48,7 +48,7 @@ class Domains:
             domain = db.Domain(userId=user_id,
                                domain=domain_name,
                                regDate=now,
-                               expDate=now + timedelta(days=30),
+                               expDate=now + timedelta(days=90),
                                status=1)
             session.add(domain)
             session.commit()
@@ -63,7 +63,7 @@ class Domains:
         try:
             domain = session.query(db.Domain).filter_by(domain=domain_name, status=1).first()
             if domain:
-                domain.expDate = datetime.now() + timedelta(days=30)
+                domain.expDate = datetime.now() + timedelta(days=90)
                 session.commit()
         except Exception as e:
             logging.error("Error renewing domain: %s", e)
