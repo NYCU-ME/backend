@@ -15,7 +15,7 @@ CREATE TABLE `users` (
       `password` varchar(100) NOT NULL DEFAULT '',
       `status` varchar(16) NOT NULL,
       `email` varchar(256) NOT NULL,
-      `limit` int(11) NOT NULL DEFAULT '2',
+      `limit` int(11) NOT NULL DEFAULT '5',
       `isAdmin` int(11) NOT NULL DEFAULT '0',
       PRIMARY KEY (`id`),
       UNIQUE KEY `id_UNIQUE` (`id`)
