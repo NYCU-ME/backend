@@ -41,6 +41,15 @@ class Domains:
         finally:
             session.close()
 
+    def list_all(self):
+        session = self.make_session()
+        try:
+            domains = session.query(db.Domain).filter_by(status=1).all()
+            return domains
+        finally:
+            session.close()
+
+
     def register(self, domain_name, user_id):
         session = self.make_session()
         try:

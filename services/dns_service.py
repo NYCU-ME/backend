@@ -31,6 +31,29 @@ class DNSService():
         self.ddns = ddns
         self.host_domains = host_domains
 
+    def __get_domain_info(self, domain):
+        domain_info = {}
+        domain_info['id'] = domain.id
+        domain_info['regDate'] = domain.regDate
+        domain_info['expDate'] = domain.expDate
+        domain_info['domain'] = domain.domain
+        domain_info['records'] = []
+        domain_info['glues'] = []
+        records = self.records.get_records(domain.id)
+        glues = self.glues.get_records(domain.id)
+        for record in records:
+            domain_info['records'].append((record.id,
+                                           record.type,
+                                           record.value,
+                                           record.ttl))
+        for record in glues:
+            domain_info['glues'].append((record.id,
+                                         record.subdomain,
+                                         record.type,
+                                         record.value,
+                                         record.ttl))
+        return domain_info
+
     def check_domain(self, domain_name):
         domain_struct = list(reversed(domain_name.split('.')))
 
@@ -58,26 +81,7 @@ class DNSService():
         if not domain:
             return None
 
-        domain_info = {}
-        domain_info['id'] = domain.id
-        domain_info['regDate'] = domain.regDate
-        domain_info['expDate'] = domain.expDate
-        domain_info['domain'] = domain_name
-        domain_info['records'] = []
-        domain_info['glues'] = []
-        records = self.records.get_records(domain.id)
-        glues = self.glues.get_records(domain.id)
-        for record in records:
-            domain_info['records'].append((record.id,
-                                           record.type,
-                                           record.value,
-                                           record.ttl))
-        for record in glues:
-            domain_info['glues'].append((record.id,
-                                         record.subdomain,
-                                         record.type,
-                                         record.value,
-                                         record.ttl))
+        domain_info = self.__get_domain_info(domain)
         return domain_info
 
     def get_expired_domain(self):
@@ -164,3 +168,12 @@ class DNSService():
         )
         self.glues.del_record(glue_record.id)
         self.ddns.del_record(real_domain, type_, value)
+    
+    def list_domains(self):
+        domains = self.domains.list_all()
+        result = []
+        for domain in domains:
+            result.append(self.__get_domain_info(domain))
+        return result
+            
+

@@ -32,7 +32,7 @@ class AuthService:
         token['exp'] = now + 3600
         token['iat'] = token['nbf'] = now
         token['uid'] = token['username']
-        token['adm'] = False
+        token['isAdmin'] = False
 
         user = self.users.query(token['uid'])
 
@@ -72,20 +72,21 @@ class AuthService:
             domains = self.domains.list_by_user(uid)
             if len(domains) >= self.users.query(uid).limit:
                 raise UnauthorizedError("You cannot apply for more domains.")
+
+        domain = self.domains.get_domain(domain_name)
         if action == Operation.RELEASE:
-            domain = self.domains.get_domain(domain_name)
-            if not domain or domain.userId != uid:
-                raise UnauthorizedError(
-                        f"You cannot modify domain {domain_name} which you don't have."
-                )
-        if action == Operation.MODIFY:
-            domain = self.domains.get_domain(domain_name)
             if domain.userId != uid:
                 raise UnauthorizedError(
                         f"You cannot modify domain {domain_name} which you don't have."
                 )
+
+        if action == Operation.MODIFY:
+            if domain.userId != uid:
+                raise UnauthorizedError(
+                        f"You cannot modify domain {domain_name} which you don't have."
+                )
+
         if action == Operation.RENEW:
-            domain = self.domains.get_domain(domain_name)
             if domain.userId != uid:
                 raise UnauthorizedError(
                         f"You cannot modify domain {domain_name} which you don't have."
