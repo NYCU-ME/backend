@@ -77,6 +77,9 @@ def add_glue_record(domain, subdomain, type_, value):
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
 
+    if dnsService.check_domain(f"{domain_name}.{subdomain}") != 1+len(domain_struct):
+        return {"msg": "Not valid subdomain."}, 400
+
     try:
         req = request.json
         if req and 'ttl' in req and 5 <= int(req['ttl']) <= 86400:

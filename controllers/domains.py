@@ -24,7 +24,7 @@ def register_domain(domain):
         return {"msg": "Length must be greater than 3."}, 400
 
     if dnsService.check_domain(domain_name) != len(domain_struct):
-        return {"msg": "You can only register specific level domain name."}, 400
+        return {"msg": "Not valid domain name."}, 400
 
     try:
         if not g.user['isAdmin']: 
