@@ -23,8 +23,6 @@ jobs:
 
     - name: install essential utils
       run: sudo apt update && sudo apt install -y bind9 bind9utils
-    - name: Copy config file
-      run: cp ./images/flask/app/config.py.sample ./images/flask/app/config.py
 
     - name: Running test
       run: make init && make test
