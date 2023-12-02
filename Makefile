@@ -15,7 +15,7 @@ init:
 	@rm -f ./config/named/keys/*.state
 	@rm -f ./config/named/keys/*.private
 	@rm -rf ./config/named/ddnskey.conf
-	@cp ./images/flask/app/config.py.sample ./images/flask/app/config.py
+	@cp ./config/flask/config.py.sample ./config/flask/config.py
 	@tsig-keygen -a hmac-sha512 ddnskey > ./config/named/ddnskey.conf
 
 build:
@@ -39,6 +39,7 @@ run-test:
 	done
 	@docker compose -f docker-compose-test.yaml ps -a | grep flask_app_test | egrep -o "Exited \(.*\)" | egrep -o "\(.*\)" | tr -d '()' > .test_result 
 	@docker compose -f docker-compose-test.yaml logs flask_app_test
+	@docker compose -f docker-compose-test.yaml logs backend_app
 	@docker compose -f docker-compose-test.yaml logs flask_app
 	@docker compose -f docker-compose-test.yaml down
 	@test_result=$$(cat .test_result)

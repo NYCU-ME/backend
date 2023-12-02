@@ -1,0 +1,26 @@
+# Oauth Parameters
+NYCU_OAUTH_ID   = ""
+NYCU_OAUTH_KEY  = ""
+NYCU_OAUTH_RURL = ""
+
+#MySQL Parameters
+MYSQL_HOST = r"172.21.21.2"
+MYSQL_USER = r"nycu_me"
+MYSQL_PSWD = r"abc123"
+MYSQL_DB   = r"nycu_me_dns"
+
+#JWT Secret Key
+JWT_SECRET   = r"abc123"
+
+#DDNS
+DDNS_KEY     = r"/etc/ddnskey.conf"
+DDNS_SERVER  = r"172.21.21.3"
+DDNS_ZONE    = r"nycu-dev.me"
+
+#ElasticSearch
+ELASTICSERVER="172.21.21.7"
+ELASTICUSER="elastic"
+ELASTICPASS="abc123"
+
+#General
+HOST_DOMAINS = [r"*.nycu-dev.me"]

@@ -45,6 +45,7 @@ services:
     build: ./images/flask
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
+      - ./config/flask/config.py:/opt/app/config.py
     ports:
       - "8000:8000"
     networks:
@@ -65,6 +66,7 @@ services:
     command: ["python3", "launch_thread.py"]
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
+      - ./config/flask/config.py:/opt/app/config.py
     networks:
       docker:
         ipv4_address: 172.21.21.5
