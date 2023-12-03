@@ -33,7 +33,9 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           commit-message: Update submodules
-          title: '[AUTO] Update submodules'
-          body: 'Automated changes by GitHub Actions. Please review before merging.'
+          title: '[AUTO] Update submodules from ${{ github.ref }}'
+          body: |
+            Automated changes by GitHub Actions. Please review before merging.
+            Triggered by: ${{ github.ref }}
           branch: 'update-submodules-${{ github.run_number }}'
           base: 'main'
