@@ -13,6 +13,10 @@
 有 1 個 submodule：
 - [backend/images/flask/app](https://github.com/NYCU-ME/backend-flask-server/tree/main)
 
+## CICD Flow
+
+在 [backend/images/flask/app](https://github.com/NYCU-ME/backend-flask-server/tree/main) 發送 PR，同時會在 backend（本 repo）發送一個 PR，待管理員通過后，程式碼會自動部署到 production 上。
+
 ## 請執行以下指令
 
 ```
