@@ -6,13 +6,12 @@ import logging
 
 class DDNS:
 
-    def __launch(self): 
-        pr = subprocess.Popen( # pylint: disable=all
+    def __launch(self):
+        pr = subprocess.Popen(
             ['nsupdate', '-k', self.key_file],
             bufsize=0,
             stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE
-        )
+            stdout=subprocess.PIPE)
 
         if self.name_server:
             pr.stdin.write(f"server {self.name_server}\n".encode())
@@ -58,13 +57,11 @@ class DDNS:
     def add_record(self, domain, rectype, value, ttl = 5):
         if domain != "" and rectype != "" and value != "":
             if rectype == "TXT":
-                value = value.replace('"', '\"')
-                value = f'"{value}"'
+                value = '"%s"' % value.replace('"', '\"')
             self.queue.put(f"update add {domain} {ttl} {rectype} {value}")
 
     def del_record(self, domain, rectype, value):
         if domain != "":
             if rectype == "TXT":
-                value = value.replace('"', '\"')
-                value = f'"{value}"'
+                value = '"%s"' % value.replace('"', '\"')
             self.queue.put(f"update delete {domain} {rectype} {value}")

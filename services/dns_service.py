@@ -1,15 +1,17 @@
+import time
 import re
 from enum import Enum
+
 
 DOMAIN_REGEX = re.compile(r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)$")
 
 class DNSErrors(Enum):
-    NXDOMAIN = "Non-ExistentDomain"
-    DUPLICATED = "DuplicatedRecord"
-    UNALLOWED = "NotAllowedOperation"
+    NXDOMAIN             = "Non-ExistentDomain"
+    DUPLICATED           = "DuplicatedRecord"
+    UNALLOWED            = "NotAllowedOperation"
 
 class DNSError(Exception):
-    def __init__(self, typ, msg=""):
+    def __init__(self, typ, msg = ""):
         self.typ = str(typ)
         self.msg = str(msg)
 
@@ -64,20 +66,15 @@ class DNSService():
             if len(rule) > len(struct):
                 return 0
 
-            for i, element in enumerate(rule):
-                if element == '*':
+            for i in range(len(rule)):
+                if rule[i] == '*':
                     return i + 1
-                if element != struct[i]:
+                elif rule[i] != struct[i]:
                     return 0
 
-            return None
-
         for domain in self.host_domains:
-            match_result = is_match(domain, domain_struct)
-            if match_result is not None:
-                return match_result
-
-        return None
+            if (x:=is_match(domain, domain_struct)):
+                return x
 
     def get_domain(self, domain_name):
         domain = self.domains.get_domain(domain_name)
@@ -171,10 +168,12 @@ class DNSService():
         )
         self.glues.del_record(glue_record.id)
         self.ddns.del_record(real_domain, type_, value)
-
+    
     def list_domains(self):
         domains = self.domains.list_all()
         result = []
         for domain in domains:
             result.append(self.__get_domain_info(domain))
         return result
+            
+

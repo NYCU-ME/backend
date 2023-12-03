@@ -1,5 +1,5 @@
-import datetime
 from flask import g
+import datetime
 from main import app, authService, dnsService, elastic
 from services import Operation
 
@@ -7,9 +7,9 @@ from services import Operation
 def list_domains():
     if not g.user:
         return {"msg": "Unauth."}, 401
-    if not g.user['isAdmin']:
+    if not g.user['isAdmin']: 
         return {"msg": "Unauth."}, 403
-
+    
     return {"msg": "ok", "data": dnsService.list_domains()}
 
 @app.route("/domains/<path:domain>", methods=['POST'])
@@ -27,7 +27,7 @@ def register_domain(domain):
         return {"msg": "Not valid domain name."}, 400
 
     try:
-        if not g.user['isAdmin']:
+        if not g.user['isAdmin']: 
             authService.authorize_action(g.user['uid'], Operation.APPLY, domain_name)
         dnsService.register_domain(g.user['uid'], domain_name)
         return {"msg": "ok"}
@@ -41,9 +41,9 @@ def release_domain(domain):
 
     domain_struct = domain.lower().strip('/').split('/')
     domain_name = '.'.join(reversed(domain_struct))
-
+    
     try:
-        if not g.user['isAdmin']:
+        if not g.user['isAdmin']: 
             authService.authorize_action(g.user['uid'], Operation.RELEASE, domain_name)
         dnsService.release_domain(domain_name)
         return {"msg": "ok"}
@@ -59,7 +59,7 @@ def renew_domain(domain):
     domain_name = '.'.join(reversed(domain_struct))
 
     try:
-        if not g.user['isAdmin']:
+        if not g.user['isAdmin']: 
             authService.authorize_action(g.user['uid'], Operation.RENEW, domain_name)
         dnsService.renew_domain(domain_name)
         return {"msg": "ok"}
@@ -78,7 +78,7 @@ def get_domain_traffic(domain):
     today = datetime.date.today()
 
     try:
-        if not g.user['isAdmin']:
+        if not g.user['isAdmin']: 
             authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
         for i in range(29, -1, -1):
             past_date = today - datetime.timedelta(days=i)
@@ -88,3 +88,5 @@ def get_domain_traffic(domain):
         return {"msg": "ok", "data": result}
     except Exception as e:
         return {"msg": str(e)}, 403
+
+
