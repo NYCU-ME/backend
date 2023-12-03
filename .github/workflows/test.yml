@@ -14,6 +14,7 @@ jobs:
   docker:
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    environment: LINLEE
 
     steps:
     - name: Checkout
@@ -26,3 +27,6 @@ jobs:
 
     - name: Running test
       run: make init && make test
+
+    - name: Calling jenkins to deploy
+      run: curl -X POST ${{ LINLEE.JENKINS_URL }}
