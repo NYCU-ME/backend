@@ -1,0 +1,16 @@
+name: Trigger Jenkins Webhook
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-webhook:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Trigger Jenkins Webhook
+      uses: wei/curl@v1
+      with:
+        args: -X POST http://103.179.29.10:9983/job/backend-deploy/build?token=1103d87793920e9cd3826b418bd2efbd9c
