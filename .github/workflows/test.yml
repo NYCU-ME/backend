@@ -29,4 +29,4 @@ jobs:
       run: make init && make test
 
     - name: Calling jenkins to deploy
-      run: curl -X POST ${{ LINLEE.JENKINS_URL }}
+      run: curl -X POST ${{ secrets.JENKINS_URL }}
