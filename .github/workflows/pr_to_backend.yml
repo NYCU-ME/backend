@@ -27,6 +27,13 @@ jobs:
           git config user.name "GitHub Actions - update submodules"
           git add --all
           git commit -m "Update submodules" || echo "No changes to commit"
-          git push
 
-
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+          commit-message: Update submodules
+          title: '[AUTO] Update submodules'
+          body: 'Automated changes by GitHub Actions. Please review before merging.'
+          branch: 'update-submodules-${{ github.run_number }}'
+          base: 'main'
