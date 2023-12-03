@@ -21,7 +21,7 @@ class Users:
     def add(self, uid, name, username, password, status, email):
         session = self.session_factory()
         try:
-            user = db.User(id=uid, name=name, username=username, password=password, 
+            user = db.User(id=uid, name=name, username=username, password=password,
                            status=status, email=email)
             session.add(user)
             session.commit()

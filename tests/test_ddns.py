@@ -16,7 +16,7 @@ testdata_A = [("test-ddns.nycu-dev.me", 'A', "140.113.89.64", 5),
               ("test2-ddns.nycu-dev.me", 'A', "140.113.69.69", 86400),
 ]
 
-def test_add_A_record():
+def test_add_a_record():
     domains = {}
     for testcase in testdata_A:
         ddns.add_record(*testcase)

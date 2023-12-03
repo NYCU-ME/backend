@@ -1,8 +1,8 @@
+import time
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import logging
 import pydig
-import time
 
 from models import Domains, Records, Users, Glues, db, DDNS
 from services import DNSService
@@ -89,11 +89,11 @@ def test_glue_record():
     dnsService.add_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1", 5)
     time.sleep(5)
     assert set(resolver.query("abc.test-glue.nycu-dev.me", 'A')) == {"1.1.1.1"}
-    
+
     dnsService.del_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1")
     time.sleep(5)
     assert set(resolver.query("abc.test-glue.nycu-dev.me", 'A')) == set()
-    
+
     # check if glue record is be removed after domain released
     dnsService.add_glue_record("test-glue.nycu-dev.me", "abc", "A", "1.1.1.1", 5)
     dnsService.release_domain("test-glue.nycu-dev.me")
