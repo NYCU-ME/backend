@@ -4,6 +4,12 @@ pull:
 	git pull
 	git submodule update --init images/flask/app
 
+deploy:
+	@chmod 777 ./data/elasticsearch
+	@chmod 777 ./data/logs
+	@chmod 777 ./data/zones/
+	@chmod 777 ./config/named/keys/
+
 init:
 	@mkdir -p ./data/elasticsearch
 	@mkdir -p ./data/logs
