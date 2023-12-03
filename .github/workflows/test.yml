@@ -27,6 +27,3 @@ jobs:
 
     - name: Running test
       run: make init && make test
-
-    - name: Calling jenkins to deploy
-      run: curl -X POST ${{ secrets.JENKINS_URL }}
