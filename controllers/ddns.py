@@ -22,14 +22,17 @@ def is_domain(domain):
 
 def check_type(type_, value):
 
+    error_response = None
+
     if type_ not in {'A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS'}:
-        return {
+        error_response = {
             "errorType": "DNSError",
             "msg": f"Not allowed type {type_}."
         }, 403
+
     if type_ == 'A':
         if not is_ip(value, ipaddress.IPv4Address):
-            return {
+            error_response = {
                 "errorType": "DNSError",
                 "msg": "Type A with non-IPv4 value."
             }, 403
@@ -38,7 +41,7 @@ def check_type(type_, value):
 
     if type_ == 'AAAA':
         if not is_ip(value, ipaddress.IPv6Address):
-            return {
+            error_response = {
                 "errorType": "DNSError",
                 "msg": "Type AAAA with non-IPv6 value."
             }, 403
@@ -46,28 +49,31 @@ def check_type(type_, value):
         value = is_ip(value, ipaddress.IPv6Address)
 
     if type_ == 'CNAME' and not is_domain(value):
-        return {
+        error_response = {
             "errorType": "DNSError",
             "msg": "Type CNAME with non-domain-name value."
         }, 403
 
     if type_ == 'MX' and not is_domain(value):
-        return {
+        error_response = {
             "errorType": "DNSError",
             "msg": "Type MX with non-domain-name value."
         }, 403
 
     if type_ == 'TXT' and (len(value) > 255 or value.count('\n')):
-        return {
+        error_response = {
             "errorType": "DNSError", 
             "msg": "Type TXT with value longer than 255 chars or more than 1 line."
         }, 403
 
 
     if type_ == 'NS' and not is_domain(value):
-        return {"errorType": "DNSError", "msg": "Type NS with non-domain-name value."}, 403
+        error_response = {
+            "errorType": "DNSError",
+            "msg": "Type NS with non-domain-name value."
+        }, 403
 
-    return None
+    return error_response
 
 @app.route("/ddns/<path:domain>/records/<string:type_>/<string:value>", methods=['POST'])
 def add_record(domain, type_, value):
