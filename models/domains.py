@@ -20,10 +20,7 @@ class Domains:
         session = self.make_session()
         try:
             now = datetime.now()
-            domain = session.query(db.Domain)\
-                .filter_by(status=1)\
-                .filter(db.Domain.expDate < now)\
-                .first()
+            domain = session.query(db.Domain).filter_by(status=1).filter(db.Domain.expDate < now).first()
             return domain
         finally:
             session.close()

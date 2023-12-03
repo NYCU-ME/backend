@@ -1,5 +1,6 @@
-import json
 import requests
+import json
+import config
 
 class Elastic():
 
@@ -29,13 +30,9 @@ class Elastic():
             }
         }
 
-        response = requests.get(
-            url,
-            headers=headers,
-            auth=auth,
-            data=json.dumps(data),
-            timeout=3
-        )
+        response = requests.get(url, headers=headers, auth=auth, data=json.dumps(data))
         response_json = response.json()
 
         return response_json.get('hits', {}).get('total', {}).get('value', 0)
+
+
