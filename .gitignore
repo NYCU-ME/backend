@@ -11,4 +11,5 @@ data/elastic*
 ddnskey.conf
 .event
 .pidfile
+config.py
 nycu.me.db
