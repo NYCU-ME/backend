@@ -13,6 +13,13 @@ env_test = os.getenv('TEST')
 
 app = Flask(__name__)
 flask_cors.CORS(app)
+app.logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+formatter = logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d] [%(remote_addr)s] [%(url)s]'
+)
+handler.setFormatter(formatter)
+app.logger.addHandler(handler)
 
 sql_engine = None
 if env_test is not None:

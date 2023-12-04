@@ -7,6 +7,12 @@ def before_request():
 
     g.user = authService.authenticate_token(request.headers.get('Authorization'))
 
+    extra = {
+        'remote_addr': request.remote_addr, 
+        'url': request.url
+    }
+    app.logger.info('Logged in', extra=extra)
+
 @app.route("/oauth/<string:code>", methods = ['GET'])
 def get_token(code):
 
