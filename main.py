@@ -29,7 +29,7 @@ else:
         f"mysql+pymysql://{config.MYSQL_USER}:{config.MYSQL_PSWD}"
         f"@{config.MYSQL_HOST}/{config.MYSQL_DB}"
     )
-    sql_engine = create_engine(connection_string)
+    SQL_ENGINE = create_engine(connection_string)
 
 ddns = DDNS(logging, config.DDNS_KEY, config.DDNS_SERVER, config.DDNS_ZONE)
 
