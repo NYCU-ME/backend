@@ -1,6 +1,6 @@
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import logging
 
 from services.auth_service import AuthService
 from models import Users, Domains, db
@@ -23,7 +23,7 @@ def test_issue_token():
         token = "Bearer " + authService.issue_token(testcase)
         assert authService.authenticate_token(token) is not None
         # test modified token
-        assert authService.authenticate_token(token + 'a')  == None
+        assert authService.authenticate_token(token + 'a') is None
         # test if data is written
         session.expire_all()# flush orm cache
         data = session.query(db.User).filter_by(id=testcase['username']).all()
