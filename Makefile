@@ -3,6 +3,7 @@
 pull:
 	git pull
 	git submodule update --init images/flask/app
+	git submodule update --remote
 
 deploy:
 	@chmod 777 ./data/elasticsearch
