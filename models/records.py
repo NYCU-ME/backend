@@ -6,24 +6,24 @@ from . import db
 class Records:
     def __init__(self, sql_engine):
         self.sql_engine = sql_engine
-        self.Session = scoped_session(sessionmaker(bind=self.sql_engine))
+        self.session_maker = scoped_session(sessionmaker(bind=self.sql_engine))
 
     def get_record(self, record_id):
-        session = self.Session()
+        session = self.session_maker()
         try:
             return session.query(db.Record).filter_by(id=record_id, status=1).first()
         finally:
             session.close()
 
     def get_records(self, domain_id):
-        session = self.Session()
+        session = self.session_maker()
         try:
             return session.query(db.Record).filter_by(domain=domain_id, status=1).all()
         finally:
             session.close()
 
     def get_record_by_type_value(self, domain_id, type_, value):
-        session = self.Session()
+        session = self.session_maker()
         try:
             return session.query(db.Record).filter_by(domain=domain_id,
                                                       type=type_,
@@ -33,7 +33,7 @@ class Records:
             session.close()
 
     def add_record(self, domain_id, record_type, value, ttl):
-        session = self.Session()
+        session = self.session_maker()
         try:
             record = db.Record(domain=domain_id,
                                type=record_type,
@@ -50,7 +50,7 @@ class Records:
             session.close()
 
     def del_record_by_id(self, record_id):
-        session = self.Session()
+        session = self.session_maker()
         try:
             record = session.query(db.Record).filter_by(id=record_id).first()
             if record:

@@ -11,51 +11,6 @@ resolver = pydig.Resolver(
     ],
 )
 
-def test_add_ttl():
-
-    headers = get_headers("109550032")
-
-    def test_ttl(ttl, answer):
-        # Add record for ttl 10
-        response = requests.post(
-                URL_BASE + "ddns/me/nycu-dev/test-ttl1/records/A/140.113.89.64",
-                json = {'ttl': ttl},
-                headers = headers,
-                timeout=10
-        )
-        assert response.status_code == 200
-        response = requests.get(
-                URL_BASE + "whoami/",
-                headers = headers,
-                timeout=10
-        )
-        assert response.status_code == 200
-        for domain in json.loads(response.text)['domains']:
-            if domain['domain'] == 'test-ttl1.nycu-dev.me':
-                assert domain['records'][0][3] == answer
-        response = requests.delete(
-                URL_BASE + "ddns/me/nycu-dev/test-ttl1/records/A/140.113.89.64",
-                headers = headers,
-                timeout=10
-        )
-
-    # Register domains
-    response = requests.post(
-            URL_BASE + "domains/me/nycu-dev/test-ttl1",
-            headers = headers,
-            timeout=10
-    )
-
-    test_ttl(1, 5)
-    test_ttl(10, 10)
-    test_ttl(86401, 5)
-    test_ttl("random_string", 5)
-    response = requests.delete(
-            URL_BASE + "domains/me/nycu-dev/test-ttl1",
-            headers = headers,
-            timeout=10
-    )
-
 def test_register_and_release_domain():
     headers = get_headers("109550004")
     # Register domains
@@ -148,7 +103,7 @@ def test_add_and_delete_records():
     assert response.status_code == 200
 
 def test_auto_delete_glue_record():
-    
+
     headers = get_headers("110550029")
 
     response = requests.post(
@@ -157,7 +112,7 @@ def test_auto_delete_glue_record():
             timeout=10
     )
     assert response.status_code == 200
-    
+
     response = requests.post(
             URL_BASE + "glue/me/nycu-dev/test-glue-rec/records/abc/A/1.1.1.1",
             headers = headers,
@@ -171,7 +126,7 @@ def test_auto_delete_glue_record():
             timeout=10
     )
     assert response.status_code == 200
-    
+
     response = requests.delete(
             URL_BASE + "domains/me/nycu-dev/test-glue-rec",
             headers = headers,
@@ -213,6 +168,8 @@ def test_add_ttl():
             headers = headers,
             timeout=10
     )
+    assert response.status_code == 200
+
     test_ttl(1, 5)
     test_ttl(10, 10)
     test_ttl(86401, 5)
@@ -222,3 +179,4 @@ def test_add_ttl():
             headers = headers,
             timeout=10
     )
+    assert response.status_code == 200
