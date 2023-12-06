@@ -26,7 +26,7 @@ class Elastic():
                     }
                 }
             }
-       
+        }
         count_response = self.elastic.count(index="fluentd.named.dns", body=query)
         return count_response['count']
     
