@@ -101,7 +101,6 @@ services:
     environment:
       - discovery.type=single-node
       - cluster.name=elastic-udt-cluster
-      # - xpack.security.enabled=false
       - xpack.security.transport.ssl.enabled=false
       - xpack.security.http.ssl.enabled=false
       - ELASTIC_USERNAME=elastic

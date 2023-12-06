@@ -62,5 +62,5 @@ rm-db:
 	rm -f data/zones/*.jbk
 	rm -f data/zones/*.jnl
 	rm -f data/zones/*.signed
-	rm -rf data/logs
-	rm -rf data/elasticsearch
+	rm -rf data/logs/*
+	rm -rf data/elasticsearch/*
