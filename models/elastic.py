@@ -1,41 +1,33 @@
-import json
-import requests
-
+from elasticsearch import Elasticsearch
+import logging
 class Elastic():
 
     def __init__(self, server, user, password):
-        self.server = server
-        self.user = user
-        self.password = password
+        self.elastic = Elasticsearch(
+                server,
+                http_auth=(user, password)
+        )
 
     def query(self, domain, date):
-        url = f"http://{self.server}:9200/fluentd.named.dns/_search?pretty=true"
-        headers = {"Content-Type": "application/json"}
-        auth = (self.user, self.password)
-
-        data = {
-            "size": 0,
+        query = {
             "query": {
                 "bool": {
-                    "must": [
-                        {"match_phrase": {"log": f"({domain})"}},
+                    "should": [
+                        {"wildcard": {"log": f"(*.{domain})"}},
+                        {"wildcard": {"log": f"({domain})"}}
                     ],
-                    "filter": [
-                        {
-                            "term": {"log_time": date}
+                    "filter": {
+                        "range": {
+                            "@timestamp": {
+                                "gte": f"{date}T00:00:00",
+                                "lt": f"{date}T23:59:59"
+                            }
                         }
-                    ]
+                    }
                 }
             }
-        }
+       
+        count_response = self.elastic.count(index="fluentd.named.dns", body=query)
+        return count_response['count']
+    
 
-        response = requests.get(
-            url,
-            headers=headers,
-            auth=auth,
-            data=json.dumps(data),
-            timeout=3
-        )
-        response_json = response.json()
-
-        return response_json.get('hits', {}).get('total', {}).get('value', 0)
