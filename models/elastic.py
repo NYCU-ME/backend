@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-import logging
+
 class Elastic():
 
     def __init__(self, server, user, password):
@@ -27,7 +27,5 @@ class Elastic():
                 }
             }
         }
-        count_response = self.elastic.count(index="fluentd.named.dns", body=query)
+        count_response = self.elastic.count(body=query, index="fluentd.named.dns") # pylint: disable=unexpected-keyword-arg
         return count_response['count']
-    
-
