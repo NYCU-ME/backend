@@ -12,9 +12,10 @@ class Elastic():
         query = {
             "query": {
                 "bool": {
-                    "should": [
-                        {"wildcard": {"log": f"(*.{domain})"}},
-                        {"wildcard": {"log": f"({domain})"}}
+                    "must": [
+                        {"match":
+                            {"log": f"{domain}"}
+                        }
                     ],
                     "filter": {
                         "range": {
