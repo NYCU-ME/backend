@@ -66,6 +66,17 @@ def renew_domain(domain):
     except Exception as e:
         return {"msg": str(e)}, 403
 
+@app.route("/domain/<string:domain_id>", methods=['GET'])
+def get_domain_by_id(domain_id):
+
+    if not domain_id.isnumeric():
+        return {"msg": "Invalid id."}, 400
+
+    domain = dnsService.get_domain_by_id(int(domain_id))
+    if domain is None:
+        return {"msg": "No such entry."}, 404
+    return {"msg": "ok", "domain": domain['domain']}
+
 @app.route("/traffic/<path:domain>", methods=['GET'])
 def get_domain_traffic(domain):
     if not g.user:

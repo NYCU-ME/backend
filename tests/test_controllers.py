@@ -62,6 +62,34 @@ def test_register_and_release_domain():
     domains = json.loads(response.text)['domains']
     assert {domain['domain'] for domain in domains} == set()
 
+def test_get_domain_by_id():
+    headers = get_headers("0716023")
+    # Register domain
+    response = requests.post(
+            URL_BASE + "domains/me/nycu-dev/test-domain-id",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+
+    # Because of the parallel, we cannot determine
+    # which one would be the answer.
+    response = requests.get(
+        URL_BASE + "domain/1",
+        headers = headers,
+        timeout=10
+    )
+    domain_name = json.loads(response.text)['domain']
+    assert response.status_code == 200
+    assert domain_name != ""
+
+    # Release domain
+    response = requests.delete(
+        URL_BASE + "domains/me/nycu-dev/test-domain-id",
+        headers = headers,
+        timeout=10
+    )
+    assert response.status_code == 200
 def test_add_and_delete_records():
     headers = get_headers("109550028")
     # Register domains

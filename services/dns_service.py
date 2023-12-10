@@ -87,6 +87,14 @@ class DNSService():
         domain_info = self.__get_domain_info(domain)
         return domain_info
 
+    def get_domain_by_id(self, idx):
+        domain = self.domains.get_domain_by_id(idx)
+        if not domain:
+            return None
+
+        domain_info = self.__get_domain_info(domain)
+        return domain_info
+
     def get_expired_domain(self):
         return self.domains.get_expired_domain()
 
