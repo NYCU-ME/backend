@@ -60,6 +60,8 @@ class DDNS:
             if rectype == "TXT":
                 value = value.replace('"', '\"')
                 value = f'"{value}"'
+            if rectype == "MX":
+                value = f"10 {value}"
             self.queue.put(f"update add {domain} {ttl} {rectype} {value}")
 
     def del_record(self, domain, rectype, value):
@@ -67,4 +69,7 @@ class DDNS:
             if rectype == "TXT":
                 value = value.replace('"', '\"')
                 value = f'"{value}"'
+            if rectype == "MX":
+                value = f"10 {value}"
             self.queue.put(f"update delete {domain} {rectype} {value}")
+            print(f"update delete {domain} {rectype} {value}")
