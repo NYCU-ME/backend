@@ -20,7 +20,7 @@ testdata = [{'email':"lin.cs09@nycu.edu.tw",'username':"109550028"},
 
 def test_issue_token():
     for testcase in testdata:
-        token = "Bearer " + authService.issue_token(testcase)
+        token = "Bearer " + authService.issue_token(testcase, "logged")
         assert authService.authenticate_token(token) is not None
         # test modified token
         assert authService.authenticate_token(token + 'a') is None

@@ -1,5 +1,7 @@
 from datetime import timezone, datetime
 from enum import Enum
+from email_validator import validate_email, EmailNotValidError
+import bcrypt
 import jwt
 
 class Operation(Enum):
@@ -25,7 +27,7 @@ class AuthService:
         self.users = users
         self.domains = domains
 
-    def issue_token(self, profile):
+    def issue_token(self, profile, type_):
         now = int(datetime.now(tz=timezone.utc).timestamp())
         token = profile
         token['iss'] = 'dns.nycu.me'
@@ -33,6 +35,7 @@ class AuthService:
         token['iat'] = token['nbf'] = now
         token['uid'] = token['username']
         token['isAdmin'] = False
+        token['type'] = type_
 
         user = self.users.query(token['uid'])
 
@@ -91,3 +94,15 @@ class AuthService:
                 raise UnauthorizedError(
                         f"You cannot modify domain {domain_name} which you don't have."
                 )
+
+    def verify_email(self, email):
+        try:
+            if not validate_email(email):
+                return False
+            if email.endswith('nycu.edu.tw') or email.endswith('nctu.edu.tw'):
+                return False
+            if email.endswith('.edu.tw'):
+                return True
+            return False
+        except EmailNotValidError:
+            return False
