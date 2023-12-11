@@ -1,7 +1,6 @@
 from datetime import timezone, datetime
 from enum import Enum
 from email_validator import validate_email, EmailNotValidError
-import bcrypt
 import jwt
 
 class Operation(Enum):
