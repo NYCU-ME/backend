@@ -22,5 +22,13 @@ ELASTICSERVER="http://172.21.21.7:9200"
 ELASTICUSER="elastic"
 ELASTICPASS="abc123"
 
+#Email
+SMTP_SERVER = r""
+SMTP_PORT   = 25
+SMTP_USER   = r""
+SMTP_PASS   = r""
+SMTP_FROM   = r""
+
 #General
 HOST_DOMAINS = [r"*.nycu-dev.me"]
+BASE_URL = r"https://nycu-dev.me/"

@@ -9,7 +9,7 @@ FLUSH PRIVILEGES;
 --
 
 CREATE TABLE `users` (
-      `id` varchar(16) NOT NULL,
+      `id` varchar(256) NOT NULL,
       `name` varchar(256) NOT NULL,
       `username` varchar(256) NOT NULL,
       `password` varchar(100) NOT NULL DEFAULT '',
