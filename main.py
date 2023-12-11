@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 import config
 from models import Users, Domains, Records, Glues, DDNS, Elastic, db
-from services import AuthService, DNSService, Oauth
+from services import AuthService, DNSService, MailService, Oauth
 
 env_test = os.getenv('TEST')
 
@@ -19,6 +19,8 @@ formatter = logging.Formatter(
 )
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
+
+BASE_URL = config.BASE_URL
 
 SQL_ENGINE = None
 if env_test is not None:
@@ -45,5 +47,6 @@ nycu_oauth = Oauth(redirect_uri = config.NYCU_OAUTH_RURL,
 elastic = Elastic(config.ELASTICSERVER, config.ELASTICUSER, config.ELASTICPASS)
 authService = AuthService(logging, config.JWT_SECRET, users, domains)
 dnsService = DNSService(logging, users, domains, records, glues, ddns, config.HOST_DOMAINS)
+mailService = MailService(logging, config.SMTP_SERVER, config.SMTP_PORT, config.SMTP_USER, config.SMTP_PASS, config.SMTP_FROM)
 
 from controllers import auth, domains, ddns, glue # pylint: disable=all

@@ -43,3 +43,16 @@ class Users:
             session.rollback()
         finally:
             session.close()
+
+    def update_password(self, uid, password):
+        session = self.session_factory()
+        try:
+            user = session.query(db.User).filter_by(id=uid).first()
+            if user:
+                user.password = password
+                session.commit()
+        except Exception as e:
+            logging.error("Error updating user password: %s", e)
+            session.rollback()
+        finally:
+            session.close()
