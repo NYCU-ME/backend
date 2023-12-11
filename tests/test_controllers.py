@@ -72,16 +72,23 @@ def test_get_domain_by_id():
     )
     assert response.status_code == 200
 
+    response = requests.get(
+            URL_BASE + "whoami/",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    idx = json.loads(response.text)['domains'][0]['id']
     # Because of the parallel, we cannot determine
     # which one would be the answer.
     response = requests.get(
-        URL_BASE + "domain/1",
+        URL_BASE + f"domain/{idx}",
         headers = headers,
         timeout=10
     )
-    domain_name = json.loads(response.text)['domain']
     assert response.status_code == 200
-    assert domain_name != ""
+    domain_name = json.loads(response.text)['domain']
+    assert domain_name == "test-domain-id.nycu-dev.me"
 
     # Release domain
     response = requests.delete(
