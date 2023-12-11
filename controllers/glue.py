@@ -1,3 +1,4 @@
+import base64
 import re
 import ipaddress
 from flask import request, g
@@ -85,6 +86,9 @@ def add_glue_record(domain, subdomain, type_, value):
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
 
+    if type_ == 'TXT':
+        value = base64.b64decode(value).decode()
+
     if dnsService.check_domain(f"{domain_name}.{subdomain}"):
         return {"msg": "Not valid subdomain."}, 400
 
@@ -118,6 +122,9 @@ def del_glue_record(domain, subdomain, type_, value):
 
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
+
+    if type_ == 'TXT':
+        value = base64.b64decode(value).decode()
 
     check_result = check_type(type_, value)
     if check_result:

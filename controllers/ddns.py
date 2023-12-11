@@ -1,3 +1,4 @@
+import base64
 import re
 import ipaddress
 from flask import request, g
@@ -83,6 +84,9 @@ def add_record(domain, type_, value):
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
 
+    if type_ == 'TXT':
+        value = base64.b64decode(value).decode()
+
     try:
         req = request.json
         if req and 'ttl' in req and 5 <= int(req['ttl']) <= 86400:
@@ -110,6 +114,9 @@ def del_record(domain, type_, value):
 
     domain_struct = domain.lower().strip('/').split('/')
     domain_name   = '.'.join(reversed(domain_struct))
+
+    if type_ == 'TXT':
+        value = base64.b64decode(value).decode()
 
     check_result = check_type(type_, value)
     if check_result:
