@@ -27,7 +27,7 @@ class Elastic():
                     },
                 }
             },
-            "min_score": 7
+            "min_score": 3
         }
         count_response = self.elastic.count(body=query, index="fluentd.named.dns") # pylint: disable=unexpected-keyword-arg
         return count_response['count']
