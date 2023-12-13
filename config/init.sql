@@ -27,7 +27,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `domains` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
-      `userId` varchar(16) NOT NULL,
+      `userId` varchar(256) NOT NULL,
       `domain` text,
       `regDate` datetime DEFAULT NULL,
       `expDate` datetime DEFAULT NULL,
