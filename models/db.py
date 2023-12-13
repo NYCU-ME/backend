@@ -23,7 +23,7 @@ class Domain(Base):
     __tablename__ = 'domains'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userId = Column(String(16), ForeignKey('users.id'), nullable=False)
+    userId = Column(String(256), ForeignKey('users.id'), nullable=False)
     domain = Column(Text)
     regDate = Column(DateTime)
     expDate = Column(DateTime)
