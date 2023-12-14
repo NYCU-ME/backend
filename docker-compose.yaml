@@ -29,6 +29,7 @@ services:
       - ./config/named:/etc/bind
     ports:
       - "53:53/UDP"
+      - "53:53"
       - "953:953"
     networks:
       docker:
