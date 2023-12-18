@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from enum import Enum
 
 DOMAIN_REGEX = re.compile(r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)$")
@@ -33,7 +34,7 @@ class DNSService():
         domain_info = {}
         domain_info['id'] = domain.id
         domain_info['regDate'] = domain.regDate
-        domain_info['expDate'] = domain.expDate
+        domain_info['expDate'] = domain.expDate.strftime('%Y-%m-%d')
         domain_info['domain'] = domain.domain
         domain_info['records'] = []
         domain_info['glues'] = []
