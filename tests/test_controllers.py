@@ -87,7 +87,7 @@ def test_get_domain_by_id():
         timeout=10
     )
     assert response.status_code == 200
-    domain_name = json.loads(response.text)['domain']
+    domain_name = json.loads(response.text)['domain']['domain']
     assert domain_name == "test-domain-id.nycu-dev.me"
 
     # Release domain
@@ -97,6 +97,7 @@ def test_get_domain_by_id():
         timeout=10
     )
     assert response.status_code == 200
+
 def test_add_and_delete_records():
     headers = get_headers("109550028")
     # Register domains

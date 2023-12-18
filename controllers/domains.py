@@ -75,7 +75,12 @@ def get_domain_by_id(domain_id):
     domain = dnsService.get_domain_by_id(int(domain_id))
     if domain is None:
         return {"msg": "No such entry."}, 404
-    return {"msg": "ok", "domain": domain['domain']}
+    try:
+        if not g.user['isAdmin']:
+            authService.authorize_action(g.user['uid'], Operation.MODIFY, domain['domain'])
+        return {"msg": "ok", "domain": domain}
+    except Exception as e:
+        return {"msg": str(e)}, 403
 
 @app.route("/traffic/<path:domain>", methods=['GET'])
 def get_domain_traffic(domain):

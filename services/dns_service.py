@@ -1,5 +1,4 @@
 import re
-from datetime import datetime
 from enum import Enum
 
 DOMAIN_REGEX = re.compile(r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)$")
