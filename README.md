@@ -5,12 +5,12 @@
 有 6 個 Containers：
 - mysqld：資料的儲存
 - named：BIND9 DNS server
-- flask：API server
+- flask_app：API server
 - backend_app：domain 回收機制
 - fluentd：log 收集器
 - elasticsearch：log 分析工具
 
-有 1 個 submodule：
+有 1 個 submodule，是 flask_app 和 backend_app 的原始碼，請看：
 - [backend/images/flask/app](https://github.com/NYCU-ME/backend-flask-server/tree/main)
 
 ## CICD Flow
