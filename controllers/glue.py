@@ -106,7 +106,8 @@ def add_glue_record(domain, subdomain, type_, value):
         return check_result
 
     try:
-        authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
+        if not g.user['isAdmin']:
+            authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
         dnsService.add_glue_record(domain_name, subdomain, type_, value, ttl)
         return {"msg": "ok"}
     except Exception as e:
@@ -131,7 +132,8 @@ def del_glue_record(domain, subdomain, type_, value):
         return check_result
 
     try:
-        authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
+        if not g.user['isAdmin']:
+            authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
         dnsService.del_glue_record(domain_name, subdomain, type_, value)
         return {"msg": "ok"}
     except Exception as e:
