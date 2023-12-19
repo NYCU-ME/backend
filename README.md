@@ -4,47 +4,6 @@
 
 ## Architecture
 
-```
-.
-├── config.py
-├── config.py.sample
-├── controllers
-│   ├── auth.py
-│   ├── ddns.py
-│   ├── domains.py
-│   ├── glue.py
-│   └── __init__.py
-├── launch_thread.py
-├── main.py
-├── models
-│   ├── db.py
-│   ├── ddns.py
-│   ├── domains.py
-│   ├── elastic.py
-│   ├── glues.py
-│   ├── __init__.py
-│   ├── records.py
-│   └── users.py
-├── README.md
-├── services
-│   ├── auth_service.py
-│   ├── dns_service.py
-│   ├── __init__.py
-│   └── nctu_oauth
-│       ├── __init__.py
-│       ├── oauth.py
-│       └── README.md
-└── tests
-    ├── __init__.py
-    ├── test_attacker.py
-    ├── test_common.py
-    ├── test_controllers.py
-    ├── test_ddns.py
-    ├── test_domain_expired.py
-    ├── test_domain_register.py
-    └── test_issue_token.py
-```
-
 ### config.py 和 config.py.sample:
 config.py 包含應用程序的配置信息，如資料庫連接設置、API金鑰等。
 config.py.sample 是 config.py 的範本，用來展示配置文件的格式和示例值。
