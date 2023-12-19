@@ -101,7 +101,8 @@ def add_record(domain, type_, value):
         return check_result
 
     try:
-        authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
+        if not g.user['isAdmin']:
+            authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
         dnsService.add_record(domain_name, type_, value, ttl)
         return {"msg": "ok"}
     except Exception as e:
@@ -123,7 +124,8 @@ def del_record(domain, type_, value):
         return check_result
 
     try:
-        authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
+        if not g.user['isAdmin']:
+            authService.authorize_action(g.user['uid'], Operation.MODIFY, domain_name)
         dnsService.del_record(domain_name, type_, value)
         return {"msg": "ok"}
     except Exception as e:
