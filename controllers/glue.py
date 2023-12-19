@@ -89,7 +89,7 @@ def add_glue_record(domain, subdomain, type_, value):
     if type_ == 'TXT':
         value = base64.b64decode(value).decode()
 
-    if dnsService.check_domain(f"{domain_name}.{subdomain}"):
+    if dnsService.check_domain(f"{subdomain}.{domain_name}") < len(domain_struct):
         return {"msg": "Not valid subdomain."}, 400
 
     try:

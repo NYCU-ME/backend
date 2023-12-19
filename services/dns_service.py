@@ -70,14 +70,14 @@ class DNSService():
                 if element != struct[i]:
                     return 0
 
-            return None
+            return 0
 
         for domain in self.host_domains:
             match_result = is_match(domain, domain_struct)
-            if match_result is not None:
+            if match_result:
                 return match_result
 
-        return None
+        return 0
 
     def get_domain(self, domain_name):
         domain = self.domains.get_domain(domain_name)
