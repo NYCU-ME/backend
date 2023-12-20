@@ -72,6 +72,9 @@ def get_domain_by_id(domain_id):
     if not domain_id.isnumeric():
         return {"msg": "Invalid id."}, 400
 
+    if not g.user:
+        return {"msg": "Unauth."}, 401
+
     domain = dnsService.get_domain_by_id(int(domain_id))
     if domain is None:
         return {"msg": "No such entry."}, 404
