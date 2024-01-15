@@ -1,0 +1,59 @@
+$ORIGIN .
+$TTL 5	; 5 seconds
+nymu.me			IN SOA	ns1.nycu.me. admin.nycu.me. (
+				2023021193 ; serial
+				5          ; refresh (5 seconds)
+				30         ; retry (30 seconds)
+				1209600    ; expire (2 weeks)
+				5          ; minimum (5 seconds)
+				)
+			RRSIG	SOA 13 2 5 (
+				20240128024836 20240114014836 36656 nymu.me.
+				XMAqxpsI4S5d49/2WgGuRcIViovRwYXUZAGIPmHkXKvg
+				+rbSwXE8VABewMH6A8T251qQG6gtHIIWfO31hlMM0w== )
+			NS	ns1.nycu.me.
+			NS	ns2.nycu.me.
+			RRSIG	NS 13 2 5 (
+				20240128022520 20240114014836 36656 nymu.me.
+				WzAT21JUW8lrG/flsqdsXiKHMu7ykMVvkvElC7SXG6o3
+				pF2rFw3qCd4SEmWD4Bp7R2Q57mEpAeBmGx0o6OTrRw== )
+			A	103.179.29.10
+			RRSIG	A 13 2 5 (
+				20240128022520 20240114014836 36656 nymu.me.
+				E9fCaJL8i2VtKA/dIn1yU8oS16EUQFRsdB+Me6RkMH+9
+				xhfc2JwsvEavqwdp60cd7x5jWdMU8EskJ0w2lQEgOw== )
+			NSEC	nymu.me. A NS SOA RRSIG NSEC DNSKEY CDS CDNSKEY TYPE65534
+			RRSIG	NSEC 13 2 5 (
+				20240122063655 20240108054401 36656 nymu.me.
+				DQJkDITo7VZVDIdm7Ji5SgOvrQLyTurkKfhBYLZC2RCb
+				da+QGBekUb9816wcLBeEvsT4cmOS+uUZXsw/VW6+vg== )
+$TTL 3600	; 1 hour
+			DNSKEY	257 3 13 (
+				H5QvStTx91X8TGkNGjOhBnKYn9ItG4E6Tkzur4wQwsaR
+				AcCqiXaw7fV2Afasem+YBxvmu52Zxedbc6InvnFV3g==
+				) ; KSK; alg = ECDSAP256SHA256 ; key id = 36656
+			RRSIG	DNSKEY 13 2 3600 (
+				20240121054508 20240107053121 36656 nymu.me.
+				FwJRkGXw1k+FcbPX/GgfiXEZ7tcwPdFWLAuoXuPA12ka
+				LZIys8+WzjTjl04de0m7WU8STrMkUPPL6+NvcQuJZw== )
+			CDS	36656 13 2 (
+				FDB90A022092494180458D7E658126DCC36BEDC2B345
+				AF5DE462B3A823AABC30 )
+			RRSIG	CDS 13 2 3600 (
+				20240121054508 20240107053121 36656 nymu.me.
+				49qJAoa2RVsn3RFyOgyMXvYDt4Ix0CX3bawIYhuDkvfk
+				7jkpoxf9imMMD9wxcnnge2YYZ+d8O5dsqLfMKtwGUA== )
+			CDNSKEY	257 3 13 (
+				H5QvStTx91X8TGkNGjOhBnKYn9ItG4E6Tkzur4wQwsaR
+				AcCqiXaw7fV2Afasem+YBxvmu52Zxedbc6InvnFV3g==
+				) ; KSK; alg = ECDSAP256SHA256 ; key id = 36656
+			RRSIG	CDNSKEY 13 2 3600 (
+				20240121054508 20240107053121 36656 nymu.me.
+				/kEsV0ZpSXOsbuu9KKs9Jm9R/NN3KQvYIZhGEsppyN9B
+				ph3F7rtnU2qro+c9QWN1bqqmOk4VIblOD6LNrZLABQ== )
+$TTL 0	; 0 seconds
+			TYPE65534 \# 5 ( 0D8F300001 )
+			RRSIG	TYPE65534 13 2 0 (
+				20240128022520 20240114014836 36656 nymu.me.
+				UScn1U11X/+Jgmo4yv4ghJuH/Dpg1YbAWyQ0fXB8lvH4
+				0W0qCCvG2MzevqCBls4MejPmGaCmugezhgt/+qcwXg== )

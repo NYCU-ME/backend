@@ -44,6 +44,7 @@ services:
 
   flask_app:
     build: ./images/flask
+    restart: always
     volumes:
       - ./config/named/ddnskey.conf:/etc/ddnskey.conf
       - ./config/flask/config.py:/opt/app/config.py
