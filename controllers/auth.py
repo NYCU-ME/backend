@@ -1,5 +1,5 @@
 from flask import request, g
-from main import env_test, app, nycu_oauth, authService, dnsService, mailService, BASE_URL
+from main import env_test, app, nycu_oauth, authService, dnsService #, mailService, BASE_URL
 
 @app.before_request
 def before_request():
