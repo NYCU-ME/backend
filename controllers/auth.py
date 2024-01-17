@@ -39,28 +39,28 @@ def whoami():
         return data
     return {'msg': "Unauth."}, 401
 
-@app.route("/login_email", methods=['POST'])
-def login_email():
-    try:
-        data = request.json
-        if 'email' not in data:
-            return  {"msg": "Invalid data."}, 400
-    except Exception:
-        return {"msg": "Invalid data."}, 400
+# @app.route("/login_email", methods=['POST'])
+# def login_email():
+#     try:
+#         data = request.json
+#         if 'email' not in data:
+#             return  {"msg": "Invalid data."}, 400
+#     except Exception:
+#         return {"msg": "Invalid data."}, 400
 
-    if not authService.verify_email(data['email']):
-        return {"msg": "Invalid email."}, 400
+#     if not authService.verify_email(data['email']):
+#         return {"msg": "Invalid email."}, 400
 
-    # passwd = ''.join(random.sample(string.ascii_letters + string.digits, 8))
-    # hashed_passwd = bcrypt.hashpw(passwd.encode(), bcrypt.gensalt())
-    # users.update_passwd(data['email'], hashed_passwd.decode())
-    token = authService.issue_token(
-        {
-            'email'   : data['email'],
-            'username': data['email']
-        },
-        "logged"
-    )
+#     # passwd = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+#     # hashed_passwd = bcrypt.hashpw(passwd.encode(), bcrypt.gensalt())
+#     # users.update_passwd(data['email'], hashed_passwd.decode())
+#     token = authService.issue_token(
+#         {
+#             'email'   : data['email'],
+#             'username': data['email']
+#         },
+#         "logged"
+#     )
 
-    mailService.send_mail(data['email'], "NYCU-ME 登入鏈結", f"{BASE_URL}login_email/?token={token}")
-    return {'msg': 'ok'}
+#     mailService.send_mail(data['email'], "NYCU-ME 登入鏈結", f"{BASE_URL}login_email/?token={token}")
+#     return {'msg': 'ok'}
