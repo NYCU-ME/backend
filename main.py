@@ -29,7 +29,7 @@ if env_test is not None:
 else:
     connection_string = (
         f"mysql+pymysql://{config.MYSQL_USER}:{config.MYSQL_PSWD}"
-        f"@{config.MYSQL_HOST}/{config.MYSQL_DB}"
+        f"@{config.MYSQL_HOST}/{config.MYSQL_DB}?wait_timeout=31536000"
     )
     SQL_ENGINE = create_engine(connection_string)
 
