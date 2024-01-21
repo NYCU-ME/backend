@@ -186,3 +186,6 @@ class DNSService():
         for domain in domains:
             result.append(self.__get_domain_info(domain))
         return result
+
+    def count_domain(self):
+        return self.domains.count_domain()

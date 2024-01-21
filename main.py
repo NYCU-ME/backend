@@ -49,4 +49,4 @@ authService = AuthService(logging, config.JWT_SECRET, users, domains)
 dnsService = DNSService(logging, users, domains, records, glues, ddns, config.HOST_DOMAINS)
 mailService = MailService(logging, config.SMTP_SERVER, config.SMTP_PORT, config.SMTP_USER, config.SMTP_PASS, config.SMTP_FROM)
 
-from controllers import auth, domains, ddns, glue # pylint: disable=all
+from controllers import auth, domains, ddns, glue, metrics # pylint: disable=all

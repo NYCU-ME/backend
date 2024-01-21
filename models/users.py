@@ -56,3 +56,14 @@ class Users:
             session.rollback()
         finally:
             session.close()
+
+    def count_user(self):
+        session = self.session_factory()
+        try:
+            count = session.query(db.User).count()
+            return count
+        except Exception as e:
+            logging.error("Error counting user: %s", e)
+            return 0
+        finally:
+            session.close()

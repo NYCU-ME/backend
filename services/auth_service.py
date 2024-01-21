@@ -105,3 +105,6 @@ class AuthService:
             return False
         except EmailNotValidError:
             return False
+
+    def count_user(self):
+        return self.users.count_user()
