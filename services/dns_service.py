@@ -20,12 +20,13 @@ class DNSError(Exception):
         return f"{self.typ}: {self.msg}"
 
 class DNSService():
-    def __init__(self, logger, users, domains, records, glues, ddns, host_domains):
+    def __init__(self, logger, users, domains, records, glues, dnskeys, ddns, host_domains):
         self.logger  = logger
         self.users = users
         self.domains = domains
         self.records = records
         self.glues = glues
+        self.dnskeys = dnskeys
         self.ddns = ddns
         self.host_domains = host_domains
 
@@ -37,8 +38,10 @@ class DNSService():
         domain_info['domain'] = domain.domain
         domain_info['records'] = []
         domain_info['glues'] = []
+        domain_info['dnskeys'] = []
         records = self.records.get_records(domain.id)
         glues = self.glues.get_records(domain.id)
+        dnskeys = self.dnskeys.get_records(domain.id)
         for record in records:
             domain_info['records'].append((record.id,
                                            record.type,
@@ -50,6 +53,12 @@ class DNSService():
                                          record.type,
                                          record.value,
                                          record.ttl))
+        for record in dnskeys:
+            domain_info['dnskeys'].append((record.id,
+                                           record.flag,
+                                           record.algorithm,
+                                           record.value,
+                                           record.ttl))
         return domain_info
 
     def check_domain(self, domain_name):
@@ -125,10 +134,13 @@ class DNSService():
             raise DNSError(DNSErrors.NXDOMAIN, "This domain is not registered.")
         records = self.records.get_records(domain.id)
         glues = self.glues.get_records(domain.id)
+        dnskeys = self.dnskeys.get_records(domain.id)
         for record in records:
             self.del_record_by_id(record.id)
         for record in glues:
             self.del_glue_record(domain.domain, record.subdomain, record.type, record.value)
+        for record in dnskeys:
+            self.del_dnssec_key(domain_name, record.flag, record.algorithm, record.value)
         self.domains.release(domain_name)
 
     def add_record(self, domain_name, type_, value, ttl):
@@ -179,6 +191,28 @@ class DNSService():
         )
         self.glues.del_record(glue_record.id)
         self.ddns.del_record(real_domain, type_, value)
+
+    def add_dnssec_key(self, domain_name, flag, algorithm, value, ttl):
+        domain = self.domains.get_domain(domain_name)
+        self.dnskeys.add_dnskey_record(
+                domain.id,
+                flag,
+                algorithm,
+                value,
+                ttl
+        )
+        self.ddns.add_dnskey_record(domain_name, flag, algorithm, value, ttl)
+
+    def del_dnssec_key(self, domain_name, flag, algorithm, value):
+        domain = self.domains.get_domain(domain_name)
+        dnssec_key = self.dnskeys.get_dnskey_by_value(
+                domain.id,
+                flag,
+                algorithm,
+                value
+        )
+        self.dnskeys.del_dnskey_record(dnssec_key.id)
+        self.ddns.del_dnskey_record(domain_name, flag, algorithm, value)
 
     def list_domains(self):
         domains = self.domains.list_all()

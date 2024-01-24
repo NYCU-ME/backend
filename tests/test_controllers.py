@@ -216,3 +216,78 @@ def test_add_ttl():
             timeout=10
     )
     assert response.status_code == 200
+
+def test_dnssec():
+    headers = get_headers("10360874")
+
+    # Register domains
+    response = requests.post(
+            URL_BASE + "domains/me/nycu-dev/test-dnssec",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    # Add KSK
+    response = requests.post(
+            URL_BASE + "dnssec/me/nycu-dev/test-dnssec/records/",
+            json = {
+                "flag": 257,
+                "algorithm": 13,
+                'value': (
+                       "oGPBfdLt+oJa6pAnDHtNcZ61d5MWfeocmxdkBI7YuS8D5MOMxLtc7Kyr "+ 
+                       "ItibqhKrrBh4m73uy4N6fRhf2e5Bug==" 
+                ),
+                'ttl': 5
+            },
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    time.sleep(5)
+    assert set(resolver.query("test-dnssec.nycu-dev.me", 'dnskey')) == {
+            "257 3 13 oGPBfdLt+oJa6pAnDHtNcZ61d5MWfeocmxdkBI7YuS8D5MOMxLtc7Kyr " +
+            "ItibqhKrrBh4m73uy4N6fRhf2e5Bug=="
+    }
+    # Del KSK
+    response = requests.delete(
+            URL_BASE + "dnssec/me/nycu-dev/test-dnssec/records/",
+            json = {
+                "flag": 257,
+                "algorithm": 13,
+                'value': (
+                       "oGPBfdLt+oJa6pAnDHtNcZ61d5MWfeocmxdkBI7YuS8D5MOMxLtc7Kyr "+ 
+                       "ItibqhKrrBh4m73uy4N6fRhf2e5Bug==" 
+                )
+            },
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    time.sleep(5)
+    assert set(resolver.query("test-dnssec.nycu-dev.me", 'dnskey')) == set()
+    # Test recycling
+    response = requests.post(
+            URL_BASE + "dnssec/me/nycu-dev/test-dnssec/records/",
+            json = {
+                "flag": 257,
+                "algorithm": 13,
+                'value': (
+                       "oGPBfdLt+oJa6pAnDHtNcZ61d5MWfeocmxdkBI7YuS8D5MOMxLtc7Kyr "+ 
+                       "ItibqhKrrBh4m73uy4N6fRhf2e5Bug==" 
+                ),
+                'ttl': 5
+            },
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    time.sleep(5)
+    assert set(resolver.query("test-dnssec.nycu-dev.me", 'dnskey')) != set()
+    response = requests.delete(
+            URL_BASE + "domains/me/nycu-dev/test-dnssec",
+            headers = headers,
+            timeout=10
+    )
+    assert response.status_code == 200
+    time.sleep(5)
+    assert set(resolver.query("test-dnssec.nycu-dev.me", 'dnskey')) == set()

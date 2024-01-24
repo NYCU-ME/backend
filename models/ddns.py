@@ -33,7 +33,7 @@ class DDNS:
 
                     self.nsupdate.stdin.write((cmd + "\n").encode())
                     diff = 1
-                    logging.debug("executing command: %s", cmd)
+                    print(f"executing command: {cmd}")
 
                 if diff and self.nsupdate.poll() is None:
                     diff = 0
@@ -72,4 +72,10 @@ class DDNS:
             if rectype == "MX":
                 value = f"10 {value}"
             self.queue.put(f"update delete {domain} {rectype} {value}")
-            print(f"update delete {domain} {rectype} {value}")
+
+    def add_dnskey_record(self, domain, rectype, algorithm, value, ttl = 5):
+        self.queue.put(f"update add {domain} {ttl} DNSKEY {rectype} 3 {algorithm} {value}")
+
+    def del_dnskey_record(self, domain, rectype, algorithm, value):
+        self.queue.put(f"update delete {domain} DNSKEY {rectype} 3 {algorithm} {value}")
+        

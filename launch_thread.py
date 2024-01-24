@@ -4,7 +4,7 @@ import time
 from sqlalchemy import create_engine
 
 import config
-from models import Users, Domains, Records, Glues, DDNS, db
+from models import Users, Domains, Records, Glues, Dnskeys, DDNS, db
 from services import AuthService, DNSService
 
 def recycle(local_dns_service):
@@ -34,9 +34,17 @@ users = Users(SQL_ENGINE)
 domains = Domains(SQL_ENGINE)
 records = Records(SQL_ENGINE)
 glues = Glues(SQL_ENGINE)
+dnskeys = Dnskeys(SQL_ENGINE)
 
 auth_service = AuthService(logging, config.JWT_SECRET, users, domains)
-dns_service = DNSService(logging, users, domains, records, glues, ddns, config.HOST_DOMAINS)
+dns_service = DNSService(logging,
+                         users,
+                         domains,
+                         records,
+                         glues,
+                         dnskeys,
+                         ddns,
+                         config.HOST_DOMAINS)
 
 if __name__ == "__main__":
     while True:

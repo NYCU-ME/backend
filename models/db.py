@@ -53,3 +53,16 @@ class Glue(Base):
     regDate = Column(DateTime)
     expDate = Column(DateTime)
     status = Column(BOOLEAN, default=True)
+
+class Dnskey(Base):
+    __tablename__ = 'dnskeys'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    domain = Column(Integer, ForeignKey('domains.id'), nullable=False)
+    ttl = Column(Integer, nullable=False)
+    flag = Column(Integer, nullable=False)
+    algorithm = Column(Integer, nullable=False)
+    value = Column(String(512))
+    regDate = Column(DateTime)
+    expDate = Column(DateTime)
+    status = Column(BOOLEAN, default=True)
