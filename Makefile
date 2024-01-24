@@ -23,7 +23,7 @@ init:
 	@rm -f ./config/named/keys/*.private
 	@rm -rf ./config/named/ddnskey.conf
 	@cp ./config/flask/config.py.sample ./config/flask/config.py
-	@cp ./.env.sample ./env
+	@cp ./.env.sample ./.env
 	@tsig-keygen -a hmac-sha512 ddnskey > ./config/named/ddnskey.conf
 
 build:
