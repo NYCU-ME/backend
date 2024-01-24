@@ -70,3 +70,19 @@ CREATE TABLE `glues` (
       CONSTRAINT `glues_ibfk_1` FOREIGN KEY (`domain`) REFERENCES `domains` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+CREATE TABLE `dnskeys` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `domain` int(11) NOT NULL,
+      `ttl` int(11) NOT NULL,
+      `flag` int(11) NOT NULL,
+      `algorithm` int(11) NOT NULL,
+      `value` varchar(512) DEFAULT NULL,
+      `regDate` datetime DEFAULT NULL,
+      `expDate` datetime DEFAULT NULL,
+      `status` tinyint(1) DEFAULT '1',
+      KEY `domain_idx` (`domain`),
+      PRIMARY KEY (`id`),
+      CONSTRAINT `dnskey_ibfk_1` FOREIGN KEY (`domain`) REFERENCES `domains` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
