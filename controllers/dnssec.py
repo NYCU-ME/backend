@@ -18,9 +18,9 @@ def add_dnssec_record(domain):
         value = req.get('value', "")
         ttl = int(req.get('ttl', 5))
 
-        if flag != 256 or flag != 257:
+        if flag not in (256, 257):
             raise ValueError("Invalid flag value.")
-        
+
         if not 5 <= ttl <= 86400:
             raise ValueError("TTL must be between 5 and 86400.")
 
@@ -49,7 +49,7 @@ def del_dnssec_record(domain):
     try:
         req = request.json
         flag = int(req.get('flag'))
-        if flag != 256 or flag != 257:
+        if flag not in (256, 257):
             raise ValueError("Invalid flag value.")
         algorithm = int(req.get('algorithm'))
         value = req.get('value', "")
