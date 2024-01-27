@@ -49,7 +49,7 @@ BEGIN
         WHERE domain = NEW.domain AND status = 1
     ) > 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Cannot insert duplicate domain with status = 1';
+        SET MESSAGE_TEXT = 'This domain has been registered';
     END IF;
 END$$
 
