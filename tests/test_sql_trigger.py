@@ -8,7 +8,7 @@ sql_engine = create_engine('sqlite:///:memory:')
 
 db.Base.metadata.create_all(sql_engine)
 
-trigger_sql = """
+TRIGGER_SQL = """
 CREATE TRIGGER before_insert_domains
 BEFORE INSERT ON domains FOR EACH ROW
 WHEN NEW.status = 1 AND (
@@ -23,7 +23,7 @@ END;
 
 # 执行 Trigger SQL 语句
 with sql_engine.connect() as connection:
-    connection.execute(text(trigger_sql))
+    connection.execute(text(TRIGGER_SQL))
 
 # Use scoped_session for thread safety
 Session = scoped_session(sessionmaker(bind=sql_engine))
