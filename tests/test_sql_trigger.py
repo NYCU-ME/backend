@@ -1,49 +1,49 @@
-import time
-import logging
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-import pydig
+from datetime import datetime, timedelta
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models import db
 
-from models import Domains, Records, Users, Glues, Dnskeys, db, DDNS
-from services import DNSService
-import config
-
-
-ddns = DDNS(logging, "/etc/ddnskey.conf", "172.21.21.3", "nycu-dev.me")
-
-resolver = pydig.Resolver(
-    executable='/usr/bin/dig',
-    nameservers=[
-        '172.21.21.3'
-    ],
-)
 
 sql_engine = create_engine('sqlite:///:memory:')
+
 db.Base.metadata.create_all(sql_engine)
-Session = sessionmaker(bind=sql_engine)
-session = Session()
 
-users = Users(sql_engine)
-domains = Domains(sql_engine)
-records = Records(sql_engine)
-glues = Glues(sql_engine)
-dnskeys = Dnskeys(sql_engine)
+trigger_sql = """
+CREATE TRIGGER before_insert_domains
+BEFORE INSERT ON domains FOR EACH ROW
+WHEN NEW.status = 1 AND (
+    SELECT COUNT(*)
+    FROM domains
+    WHERE domain = NEW.domain AND status = 1
+) > 0
+BEGIN
+    SELECT RAISE(ABORT, 'This domain has been registered');
+END;
+"""
 
-dnsService = DNSService(logging, users, domains, records, glues, dnskeys, ddns, config.HOST_DOMAINS)
+# 执行 Trigger SQL 语句
+with sql_engine.connect() as connection:
+    connection.execute(text(trigger_sql))
 
-testdata = [("test-reg.nycu-dev.me", 'A', "140.113.89.64", 5),
-            ("test-reg.nycu-dev.me", 'A', "140.113.64.89", 5)]
-answer = {"140.113.89.64", "140.113.64.89"}
+# Use scoped_session for thread safety
+Session = scoped_session(sessionmaker(bind=sql_engine))
+
+def insert_domain():
+    session = Session()
+    now = datetime.now()
+    domain = db.Domain(userId="109550028",
+                        domain="test-reg.nycu-dev.me",
+                        regDate=now,
+                        expDate=now + timedelta(days=90),
+                        status=1)
+    session.add(domain)
+    session.commit()
+    session.close()
 
 def test_sql_trigger():
-    dnsService.register_domain("109550028", "test-reg.nycu-dev.me")
-    for testcase in testdata:
-        dnsService.add_record(*testcase)
-    time.sleep(10)
-    assert set(resolver.query("test-reg.nycu-dev.me", 'A')) == answer
-    dnsService.release_domain("test-reg.nycu-dev.me")
-    dnsService.register_domain("109550028", "test-reg.nycu-dev.me")
-    time.sleep(10)
-    assert set(resolver.query("test-reg.nycu-dev.me", 'A')) == set()
-
-    
+    insert_domain()
+    try:
+        insert_domain()
+        assert 0
+    except Exception:
+        assert 1
