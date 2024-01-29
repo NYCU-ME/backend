@@ -21,7 +21,7 @@ BEGIN
 END;
 """
 
-# 执行 Trigger SQL 语句
+# execute Trigger SQL
 with sql_engine.connect() as connection:
     connection.execute(text(TRIGGER_SQL))
 
