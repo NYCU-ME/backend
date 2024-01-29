@@ -37,18 +37,6 @@ services:
       - flask_app
       - named
 
-  backend_app:
-    build: ./images/flask
-    command: ["python3", "launch_thread.py"]
-    volumes:
-      - ./config/named/ddnskey.conf:/etc/ddnskey.conf
-      - ./config/flask/config.py:/opt/app/config.py
-    networks:
-      docker:
-        ipv4_address: 172.21.21.6
-    depends_on:
-      - named 
-
 networks:
   docker:
     ipam:
