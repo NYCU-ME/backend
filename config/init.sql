@@ -37,6 +37,24 @@ CREATE TABLE `domains` (
       CONSTRAINT `domains_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4;
 
+
+DELIMITER $$
+
+CREATE TRIGGER before_insert_domains
+BEFORE INSERT ON domains FOR EACH ROW
+BEGIN
+    IF NEW.status = 1 AND (
+        SELECT COUNT(*)
+        FROM domains
+        WHERE domain = NEW.domain AND status = 1
+    ) > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'This domain has been registered';
+    END IF;
+END$$
+
+DELIMITER ;
+
 --
 -- Table structure for table `records`
 --
