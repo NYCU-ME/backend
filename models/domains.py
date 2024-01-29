@@ -67,6 +67,7 @@ class Domains:
         except Exception as e:
             logging.error("Error registering domain: %s", e)
             session.rollback()
+            raise e
         finally:
             session.close()
 
