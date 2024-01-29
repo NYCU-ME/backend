@@ -8,8 +8,10 @@ data/elastic*
 *.state
 *.private
 *.swp
+.env
 ddnskey.conf
 .event
 .pidfile
 config.py
 nycu.me.db
+
