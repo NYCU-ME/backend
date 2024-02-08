@@ -2,7 +2,7 @@ FROM python:3.11-rc-alpine
 
 RUN pip install --upgrade pip
 
-RUN apk add curl gcc bind-tools
+RUN apk add curl gcc bind-tools bind-dnssec-tools
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
     gcc libc-dev linux-headers postgresql-dev \
     && apk add libffi-dev build-base alpine-sdk

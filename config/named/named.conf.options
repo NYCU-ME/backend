@@ -3,7 +3,7 @@ options {
 
 	listen-on { any; };
 	allow-query { any; };
-	recursion yes;
+	recursion no;
 	
 	dnssec-validation yes;
 };

@@ -64,6 +64,7 @@ def test_glue_record():
 
 def test_add_dnskey_record():
     dnsService.register_domain("109550028", "test-dnskey.nycu-dev.me")
+    dnsService.add_record("test-dnskey.nycu-dev.me", 'NS', "ns1.test-dnskey.nycu-dev.me", 5)
     dnsService.add_dnssec_key(
 	    "test-dnskey.nycu-dev.me", 
 	    "257", 
@@ -72,10 +73,7 @@ def test_add_dnskey_record():
 	    "ItibqhKrrBh4m73uy4N6fRhf2e5Bug==",
 	    5)
     time.sleep(5)
-    assert set(resolver.query("test-dnskey.nycu-dev.me", 'dnskey')) == {
-            "257 3 13 oGPBfdLt+oJa6pAnDHtNcZ61d5MWfeocmxdkBI7YuS8D5MOMxLtc7Kyr " +
-            "ItibqhKrrBh4m73uy4N6fRhf2e5Bug=="
-    }
+    assert set(resolver.query("test-dnskey.nycu-dev.me", 'DS')) != set()
     dnsService.del_dnssec_key(
 	    "test-dnskey.nycu-dev.me", 
 	    "257", 
@@ -83,4 +81,4 @@ def test_add_dnskey_record():
             "oGPBfdLt+oJa6pAnDHtNcZ61d5MWfeocmxdkBI7YuS8D5MOMxLtc7Kyr " +
 	    "ItibqhKrrBh4m73uy4N6fRhf2e5Bug==")
     time.sleep(5)
-    assert set(resolver.query("test-dnskey.nycu-dev.me", 'dnskey')) == set()
+    assert set(resolver.query("test-dnskey.nycu-dev.me", 'DS')) == set()

@@ -24,6 +24,7 @@ init:
 	@rm -rf ./config/named/ddnskey.conf
 	@cp ./config/flask/config.py.sample ./config/flask/config.py
 	@cp ./.env.sample ./.env
+	@cp ./data/zones/nycu-dev.me.db.sample ./data/zones/nycu-dev.me.db
 	@tsig-keygen -a hmac-sha512 ddnskey > ./config/named/ddnskey.conf
 
 build:
@@ -65,3 +66,4 @@ rm-db:
 	rm -f data/zones/*.signed
 	rm -rf data/logs/*
 	rm -rf data/elasticsearch/*
+	cp ./data/zones/nycu-dev.me.db.sample ./data/zones/nycu-dev.me.db

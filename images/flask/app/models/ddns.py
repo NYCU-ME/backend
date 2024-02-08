@@ -1,8 +1,27 @@
 import subprocess
 import _thread
 from queue import Queue
+import os
+import tempfile
 import time
 import logging
+
+
+def generate_ds(domain, flag, alg, key):
+    dnskey_content = f"{domain}. 3600 IN DNSKEY {flag} 3 {alg} {key}\n"
+    with tempfile.NamedTemporaryFile(delete=False, mode='w', dir="/tmp") as tmpfile:
+        tmpfile_name = tmpfile.name
+        tmpfile.write(dnskey_content)
+
+    command = ['dnssec-dsfromkey', '-f', tmpfile_name, domain]
+
+    try:
+        output = subprocess.check_output(command, stderr=subprocess.STDOUT)
+        return output.decode()
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing dnssec-dsfromkey: {e.output.decode()}", file=sys.stderr)
+    finally:
+        os.remove(tmpfile_name)
 
 class DDNS:
 
@@ -74,8 +93,13 @@ class DDNS:
             self.queue.put(f"update delete {domain} {rectype} {value}")
 
     def add_dnskey_record(self, domain, rectype, algorithm, value, ttl = 5):
-        self.queue.put(f"update add {domain} {ttl} DNSKEY {rectype} 3 {algorithm} {value}")
+        # self.queue.put(f"update add {domain} {ttl} DNSKEY {rectype} 3 {algorithm} {value}")
+        ds_record = " ".join(generate_ds(domain, rectype, algorithm, value).split(" ")[3:])
+        logging.warning(f"update add {domain} {ttl} DS {ds_record}")
+        self.queue.put(f"update add {domain} {ttl} DS {ds_record}")
 
     def del_dnskey_record(self, domain, rectype, algorithm, value):
-        self.queue.put(f"update delete {domain} DNSKEY {rectype} 3 {algorithm} {value}")
-        
+        # self.queue.put(f"update delete {domain} DNSKEY {rectype} 3 {algorithm} {value}")
+        ds_record = " ".join(generate_ds(domain, rectype, algorithm, value).split(" ")[3:])
+        self.queue.put(f"update delete {domain} DS {ds_record}")
+        logging.warning(f"update delete {domain} DS {ds_record}")
