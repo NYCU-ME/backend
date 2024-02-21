@@ -218,7 +218,12 @@ class DNSService():
         domains = self.domains.list_all()
         result = []
         for domain in domains:
-            result.append(self.__get_domain_info(domain))
+            # The records information is not needed for this API.
+            data = self.__get_domain_info(domain)
+            del data["records"]
+            del data["glues"]
+            del data["dnskeys"]
+            result.append(data)
         return result
 
     def count_domain(self):
